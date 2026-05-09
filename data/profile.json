@@ -1,0 +1,26 @@
+{
+  "onboarding_completed": true,
+  "created_at": "2026-05-08",
+  "updated_at": "2026-05-08",
+  "allergies": [],
+  "dislikes": [
+    {"name": "パクチー", "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1},
+    {"name": "セロリ",   "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1}
+  ],
+  "favorites": [
+    {"name": "カレー",     "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1},
+    {"name": "ガッツリ系", "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1},
+    {"name": "中華",       "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1},
+    {"name": "丼もの",     "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1}
+  ],
+  "dietary_restrictions": [],
+  "daily_targets": {
+    "calories_kcal": 2200,
+    "protein_g": 65,
+    "fat_g": 60,
+    "carbohydrate_g": 320,
+    "salt_g": 7.5,
+    "note": "20代男性・活動量ふつうの目安"
+  },
+  "notes": "平日夜の自炊メイン。週3〜4回。土日は外食・コンビニも混じる。"
+}
