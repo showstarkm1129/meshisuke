@@ -1,0 +1,14 @@
+# Claude Code local workspace
+.claude/
+
+# Local override settings
+*.local.json
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
