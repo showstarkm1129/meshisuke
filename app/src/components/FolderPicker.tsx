@@ -5,10 +5,9 @@ import { useAppState } from '../hooks/useAppState';
 
 export function FolderPicker() {
   const { state } = useAppState();
-  const { pickFolder } = useFolderPicker();
+  const { pickFolder, resumeFolder, savedHandle } = useFolderPicker();
   const { loadData } = useDataLoader();
 
-  // ディレクトリハンドルが設定されたら自動的にデータを読み込む
   useEffect(() => {
     if (state.dirHandle !== null) {
       void loadData();
@@ -16,7 +15,6 @@ export function FolderPicker() {
   }, [state.dirHandle, loadData]);
 
   if (state.dirHandle !== null && !state.isLoading && state.errors.length === 0) {
-    // 読み込み完了後はこのコンポーネントは表示しない（App.tsx が切り替える）
     return null;
   }
 
@@ -27,9 +25,20 @@ export function FolderPicker() {
       <p>
         <small>（data/ フォルダが含まれているフォルダを選択してください）</small>
       </p>
-      <button type="button" onClick={() => void pickFolder()} disabled={state.isLoading}>
-        {state.isLoading ? '読み込み中...' : 'フォルダを選択する'}
-      </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', marginTop: '16px' }}>
+        <button type="button" onClick={() => void pickFolder()} disabled={state.isLoading}>
+          {state.isLoading ? '読み込み中...' : '新しいフォルダを選択'}
+        </button>
+        {savedHandle && !state.isLoading && (
+          <button 
+            type="button" 
+            onClick={() => void resumeFolder()} 
+            style={{ background: '#4CAF50' }}
+          >
+            前回のフォルダ ({savedHandle.name}) で再開
+          </button>
+        )}
+      </div>
     </div>
   );
 }

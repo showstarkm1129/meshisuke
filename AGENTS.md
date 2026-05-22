@@ -1,16 +1,15 @@
-# めし助プロジェクト — Claude 開発指針
+# めし助プロジェクト — Codex 開発指針
 
 ## プロジェクト概要
 
 「めし助」は食事提案・栄養管理を行う対話型 AI アシスタント。React + Vite フロントエンドで、
 ユーザーのローカルフォルダ（`pantry.json` / `equipment.json` / `profile.json` / `meal_history.jsonl`）を
-File System Access API 経由で読み書きする。LLM 呼び出しは BYO API キー方式
-（OpenRouter 単一プロバイダー経由で複数モデルに対応）。
+File System Access API 経由で読み書きする。LLM 呼び出しは BYO API キー方式。
 ソロ開発・ポートフォリオ目的の個人プロジェクト。
 
 - ライセンス: MIT
 - 対応ブラウザ: Chrome / Edge のみ（File System Access API 制約。v1 では他ブラウザ非対応）
-- データは原則クラウドに送らない（OpenRouter 経由の LLM リクエストを除く。OpenRouter は中継地点としてプロンプトを通過させる第三者であることを README/UI で明示する）
+- データは原則クラウドに送らない（ユーザーが指定した LLM エンドポイントへのリクエストを除く）
 
 ---
 
@@ -30,8 +29,8 @@ File System Access API 経由で読み書きする。LLM 呼び出しは BYO API
 ### 4. 既存ファイルを優先して編集する
 新規ファイル作成は本当に必要な時だけ。不要な README やドキュメントを生成しない。
 
-### 5. main Claude を主役にする
-本プロジェクトは小規模ソロ開発のため、**基本は main Claude が直接実装する**。
+### 5. main Codex を主役にする
+本プロジェクトは小規模ソロ開発のため、**基本は main Codex が直接実装する**。
 サブエージェントは「真に独立した責務」がある場合のみ呼び出す。
 詳細は [structure.md](./structure.md) を参照。
 
@@ -54,7 +53,7 @@ File System Access API 経由で読み書きする。LLM 呼び出しは BYO API
   まず実例側が正しいか確認した上で、型を実例に合わせるのを優先する。
 - アレルギー / 嫌い物 / 好み物の三値セマンティクス（`null` = 未確認 / `[]` = 確認済み該当なし
   / 値あり = 確認済み該当あり）を厳密に区別する。詳細は [README.md](./README.md) 参照。
-- LLM API キーは `localStorage` 保存（BYO 前提、OpenRouter API キー 1 つ）。他の保存先は使わない。
+- LLM API キーは `localStorage` 保存（BYO 前提）。他の保存先は使わない。
 
 ---
 

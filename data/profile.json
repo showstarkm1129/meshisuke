@@ -4,14 +4,44 @@
   "updated_at": "2026-05-08",
   "allergies": [],
   "dislikes": [
-    {"name": "パクチー", "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1},
-    {"name": "セロリ",   "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1}
+    {
+      "name": "パクチー",
+      "weight": 2,
+      "last_signal_at": "2026-05-08",
+      "signal_count": 1
+    },
+    {
+      "name": "セロリ",
+      "weight": 2,
+      "last_signal_at": "2026-05-08",
+      "signal_count": 1
+    }
   ],
   "favorites": [
-    {"name": "カレー",     "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1},
-    {"name": "ガッツリ系", "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1},
-    {"name": "中華",       "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1},
-    {"name": "丼もの",     "weight": 2, "last_signal_at": "2026-05-08", "signal_count": 1}
+    {
+      "name": "カレー",
+      "weight": 2,
+      "last_signal_at": "2026-05-08",
+      "signal_count": 1
+    },
+    {
+      "name": "ガッツリ系",
+      "weight": 2,
+      "last_signal_at": "2026-05-08",
+      "signal_count": 1
+    },
+    {
+      "name": "中華",
+      "weight": 2,
+      "last_signal_at": "2026-05-08",
+      "signal_count": 1
+    },
+    {
+      "name": "丼もの",
+      "weight": 2,
+      "last_signal_at": "2026-05-08",
+      "signal_count": 1
+    }
   ],
   "dietary_restrictions": [],
   "daily_targets": {

@@ -36,8 +36,8 @@
 
 - バックエンドサーバー無し（フロントエンドのみ）
 - データはユーザー自身の PC 内に保存（File System Access API / localStorage）
-- LLM 呼び出しは **ユーザー自身の API キー**（BYO Key）で行う
-- 食生活データが第三者サーバーに送信されない設計
+- LLM 呼び出しは **ユーザー自身の API キー**（BYO Key）で行う。OpenRouter 経由で複数モデル（DeepSeek / Gemini / Claude 等）を切替可能
+- 食生活データは OpenRouter 経由の LLM リクエスト以外には送信されない設計（OpenRouter は中継地点としてプロンプトを通過させるため、初回利用時に明示）
 
 > プロンプト＋データという「ロジック層」を先に作り込んでから、その上に薄い UI を乗せていくアプローチ。プロンプト自体が仕様書を兼ねるイメージです。
 
@@ -131,7 +131,7 @@ meshisuke/
 - [x] スキーマ正規化（単位 enum、null セマンティクス、構造化嗜好）
 - [ ] ブラウザベース Web アプリ実装（フロントエンドのみ）
 - [ ] File System Access API でローカルファイルを直接読み書き
-- [ ] BYO API キーで LLM 呼び出し（Claude / OpenAI 対応）
+- [ ] BYO API キーで LLM 呼び出し（OpenRouter 経由で DeepSeek / Gemini / Claude 等に対応）
 - [ ] 未回答項目をフォームから埋める UI（チャットを邪魔しない補完導線）
 - [ ] 栄養データキャッシュ（MEXT 食品成分表 八訂）
 - [ ] 作り置きの分割記録
