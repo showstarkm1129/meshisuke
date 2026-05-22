@@ -1,13 +1,46 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { useAppState } from './useAppState';
 import { findDataDirectory, checkRequiredFiles } from '../lib/fileio';
 import { formatErrorDetail } from '../lib/errors';
+import { saveDirHandle, loadDirHandle } from '../lib/idb';
 
 export function useFolderPicker() {
   const { dispatch } = useAppState();
+  const [savedHandle, setSavedHandle] = useState<FileSystemDirectoryHandle | null>(null);
+
+  useEffect(() => {
+    loadDirHandle().then(handle => {
+      if (handle) {
+        setSavedHandle(handle);
+      }
+    }).catch(console.error);
+  }, []);
+
+  const verifyAndLoadHandle = useCallback(async (rootHandle: FileSystemDirectoryHandle) => {
+    const dataHandle = await findDataDirectory(rootHandle);
+    if (dataHandle === null) {
+      dispatch({
+        type: 'ADD_ERROR',
+        payload:
+          '選択されたフォルダに data/ ディレクトリが見つかりませんでした。めし助リポジトリのルートフォルダを選択してください。',
+      });
+      return;
+    }
+
+    const missing = await checkRequiredFiles(dataHandle);
+    if (missing.length > 0) {
+      dispatch({
+        type: 'ADD_ERROR',
+        payload: `data/ フォルダに必要なファイルが見つかりません: ${missing.join(', ')}`,
+      });
+      return;
+    }
+
+    await saveDirHandle(rootHandle);
+    dispatch({ type: 'SET_DIR_HANDLE', payload: rootHandle });
+  }, [dispatch]);
 
   const pickFolder = useCallback(async () => {
-    // File System Access API 対応チェック
     if (!('showDirectoryPicker' in window)) {
       dispatch({
         type: 'ADD_ERROR',
@@ -18,36 +51,9 @@ export function useFolderPicker() {
     }
 
     try {
-      // ルートフォルダ選択ダイアログを開く
       const rootHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-
-      // data/ サブディレクトリを探す
-      const dataHandle = await findDataDirectory(rootHandle);
-      if (dataHandle === null) {
-        dispatch({
-          type: 'ADD_ERROR',
-          payload:
-            '選択されたフォルダに data/ ディレクトリが見つかりませんでした。めし助リポジトリのルートフォルダを選択してください。',
-        });
-        return;
-      }
-
-      // 必須ファイルの存在確認
-      const missing = await checkRequiredFiles(dataHandle);
-      if (missing.length > 0) {
-        dispatch({
-          type: 'ADD_ERROR',
-          payload: `data/ フォルダに必要なファイルが見つかりません: ${missing.join(', ')}`,
-        });
-        return;
-      }
-
-      // 必須ファイル確認がすべて通ったら rootHandle を state に保持する
-      // useDataLoader は state.dirHandle を見て loadData() を呼ぶ（FolderPicker の useEffect 経由）
-      // dataHandle は loadData() 内で findDataDirectory を再度呼んで取得する
-      dispatch({ type: 'SET_DIR_HANDLE', payload: rootHandle });
+      await verifyAndLoadHandle(rootHandle);
     } catch (err) {
-      // ユーザーがキャンセルした場合（AbortError）はエラーとして扱わない
       if (err instanceof DOMException && err.name === 'AbortError') {
         return;
       }
@@ -56,7 +62,33 @@ export function useFolderPicker() {
         payload: `フォルダの読み込み中にエラーが発生しました (${formatErrorDetail(err)})`,
       });
     }
-  }, [dispatch]);
+  }, [dispatch, verifyAndLoadHandle]);
 
-  return { pickFolder };
+  const resumeFolder = useCallback(async () => {
+    if (!savedHandle) return;
+    try {
+      const handle = savedHandle as unknown as {
+        queryPermission(options?: { mode: 'read' | 'readwrite' }): Promise<PermissionState>;
+        requestPermission(options?: { mode: 'read' | 'readwrite' }): Promise<PermissionState>;
+      };
+      const options = { mode: 'readwrite' as const };
+      if ((await handle.queryPermission(options)) !== 'granted') {
+        const result = await handle.requestPermission(options);
+        if (result !== 'granted') {
+          return; // ユーザーがキャンセルした
+        }
+      }
+      await verifyAndLoadHandle(savedHandle);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return;
+      }
+      dispatch({
+        type: 'ADD_ERROR',
+        payload: `フォルダの復元中にエラーが発生しました (${formatErrorDetail(err)})`,
+      });
+    }
+  }, [dispatch, savedHandle, verifyAndLoadHandle]);
+
+  return { pickFolder, resumeFolder, savedHandle };
 }

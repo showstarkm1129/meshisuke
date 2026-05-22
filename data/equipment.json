@@ -1,17 +1,35 @@
 {
   "updated_at": "2026-05-08",
   "appliances": [
-    {"name": "電子レンジ"},
-    {"name": "炊飯器"}
+    {
+      "name": "電子レンジ"
+    },
+    {
+      "name": "炊飯器"
+    }
   ],
   "cookware": [
-    {"name": "フライパン", "size": "26cm"},
-    {"name": "片手鍋",     "size": "小"}
+    {
+      "name": "フライパン",
+      "size": "26cm"
+    },
+    {
+      "name": "片手鍋",
+      "size": "小"
+    }
   ],
   "heat_sources": [
-    {"name": "IHコンロ", "burners": 2}
+    {
+      "name": "IHコンロ",
+      "burners": 2
+    }
   ],
-  "utensils": ["包丁", "まな板", "ざる", "ボウル"],
+  "utensils": [
+    "包丁",
+    "まな板",
+    "ざる",
+    "ボウル"
+  ],
   "skill_level": "中級者寄り",
   "constraints": [
     "揚げ物しない",
