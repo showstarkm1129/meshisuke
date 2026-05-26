@@ -77,6 +77,12 @@ function appReducer(state: AppState, action: Action): AppState {
         },
       };
 
+    case 'SET_MEAL_HISTORY':
+      return {
+        ...state,
+        data: { ...state.data, mealHistory: action.payload },
+      };
+
     default:
       return state;
   }

@@ -5,6 +5,7 @@ import {
   getFileHandle,
   writeJsonFile,
   appendJsonlRecord,
+  rewriteJsonlFile,
 } from '../lib/fileio';
 import type { Profile, Pantry, Equipment, MealRecord } from '../types/data.types';
 import { SaveMode } from '../types/data.types';
@@ -116,6 +117,31 @@ export function useFileSaver() {
   );
 
   /**
+   * meal_history.jsonl を全件上書き保存する（saveMode に従う）
+   */
+  const saveMealHistory = useCallback(
+    async (records: MealRecord[]) => {
+      dispatch({ type: 'SET_MEAL_HISTORY', payload: records });
+
+      if (state.saveMode !== SaveMode.Auto) return;
+      if (state.dirHandle === null) return;
+
+      try {
+        const dataHandle = await findDataDirectory(state.dirHandle);
+        if (dataHandle === null) throw new Error('data/ ディレクトリが見つかりません。');
+        const fh = await getFileHandle(dataHandle, 'meal_history.jsonl');
+        await rewriteJsonlFile(fh, records);
+      } catch (err) {
+        dispatch({
+          type: 'ADD_ERROR',
+          payload: `meal_history.jsonl の保存に失敗しました: ${formatErrorDetail(err)}`,
+        });
+      }
+    },
+    [state.dirHandle, state.saveMode, dispatch]
+  );
+
+  /**
    * 手動保存モード時: バッファに溜まったすべての変更をファイルに書き出す
    * 自動保存モードでは各 save* が即座に書き込むため、この関数は手動モード専用
    */
@@ -169,5 +195,5 @@ export function useFileSaver() {
     }
   }, [state.dirHandle, state.data, dispatch]);
 
-  return { saveProfile, savePantry, saveEquipment, appendMealRecord, flushAll };
+  return { saveProfile, savePantry, saveEquipment, appendMealRecord, saveMealHistory, flushAll };
 }

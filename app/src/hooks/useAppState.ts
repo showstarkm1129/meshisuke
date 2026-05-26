@@ -23,7 +23,8 @@ export type Action =
   | { type: 'UPDATE_PROFILE'; payload: Profile }
   | { type: 'UPDATE_PANTRY'; payload: Pantry }
   | { type: 'UPDATE_EQUIPMENT'; payload: Equipment }
-  | { type: 'ADD_MEAL_RECORD'; payload: MealRecord };
+  | { type: 'ADD_MEAL_RECORD'; payload: MealRecord }
+  | { type: 'SET_MEAL_HISTORY'; payload: MealRecord[] };
 
 // --------------------------------------------------------
 // Context の値の型

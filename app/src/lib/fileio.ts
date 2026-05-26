@@ -121,6 +121,29 @@ export async function appendJsonlRecord(
 }
 
 // --------------------------------------------------------
+// JSONL ファイルの上書き (全件再保存)
+// --------------------------------------------------------
+
+/**
+ * MealRecord の配列を JSONL ファイルとして全体上書き保存する
+ * 保存失敗時は Error をスローする
+ */
+export async function rewriteJsonlFile(
+  fileHandle: FileSystemFileHandle,
+  records: MealRecord[]
+): Promise<void> {
+  const content = records.map((r) => JSON.stringify(r)).join('\n') + (records.length > 0 ? '\n' : '');
+  const writable = await fileHandle.createWritable();
+  try {
+    await writable.write(content);
+    await writable.close();
+  } catch (err) {
+    await writable.abort();
+    throw err;
+  }
+}
+
+// --------------------------------------------------------
 // data/ ディレクトリの検出
 // --------------------------------------------------------
 
