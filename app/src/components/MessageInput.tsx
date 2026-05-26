@@ -10,6 +10,7 @@ const COMMANDS = [
   { cmd: '/profile', desc: 'プロフィール・設定の確認' },
   { cmd: '/settings', desc: '詳細設定（APIキー等）を開く' },
   { cmd: '/clear', desc: 'チャット履歴を消去' },
+  { cmd: '/hearing', desc: '初期設定（初回フォームモード）をやり直す' },
 ];
 
 export function MessageInput({

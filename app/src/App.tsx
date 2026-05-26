@@ -55,6 +55,11 @@ function App() {
           // clearSettingsChatHistory(); // This deleted legacy localStorage key.
         }
         break;
+      case '/hearing':
+        if (window.confirm('初期設定（オンボーディング）をやり直しますか？（現在のデータは維持したまま、ヒアリングを最初からやり直します）')) {
+          chatState.sendUserMessage('リセットしたい');
+        }
+        break;
       default:
         alert(`未対応のコマンドです: ${cmd}`);
     }
