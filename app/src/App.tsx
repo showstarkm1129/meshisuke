@@ -12,9 +12,13 @@ import { SettingsModal } from './components/SettingsModal';
 import { PantryView } from './components/views/PantryView';
 import { HistoryView } from './components/views/HistoryView';
 import { ProfileView } from './components/views/ProfileView';
+import { ManageView, type ResourceKey } from './components/views/ManageView';
+import type { TargetItemIndices } from './components/ChatView';
+import { CheckView } from './components/views/CheckView';
+import { AddView } from './components/views/AddView';
 import './App.css';
 
-export type ViewMode = 'chat' | 'backside' | 'pantry' | 'history' | 'profile';
+export type ViewMode = 'chat' | 'backside' | 'pantry' | 'history' | 'profile' | 'manage' | 'check' | 'add';
 
 function App() {
   const { state } = useAppState();
@@ -23,12 +27,24 @@ function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('chat');
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [manageKeys, setManageKeys] = useState<ResourceKey[]>([]);
+  const [manageIndices, setManageIndices] = useState<TargetItemIndices>({});
 
   const dataLoaded = state.dirHandle && state.data.profile !== null;
   const settingsForceOpen = Boolean(dataLoaded && !isConfigured);
 
   const handleCommand = (cmd: string) => {
     switch (cmd) {
+      case '/manage':
+        // ChatView internals handle this now, but as a fallback
+        setViewMode('chat');
+        break;
+      case '/check':
+        setViewMode('check');
+        break;
+      case '/add':
+        setViewMode('add');
+        break;
       case '/pantry': setViewMode('pantry'); break;
       case '/history': setViewMode('history'); break;
       case '/profile': setViewMode('profile'); break;
@@ -54,12 +70,20 @@ function App() {
             currentToolNotices={chatState.currentToolNotices}
             onSend={chatState.sendUserMessage}
             onCommand={handleCommand} 
+            onManageStart={(keys, indices) => {
+              setManageKeys(keys);
+              setManageIndices(indices || {});
+              setViewMode('manage');
+            }}
           />
         );
       case 'backside': return <BacksideView onCommand={handleCommand} />;
       case 'pantry': return <PantryView />;
       case 'history': return <HistoryView />;
       case 'profile': return <ProfileView />;
+      case 'manage': return <ManageView selectedKeys={manageKeys} targetIndices={manageIndices} />;
+      case 'check': return <CheckView />;
+      case 'add': return <AddView />;
       default: 
         return (
           <ChatView 

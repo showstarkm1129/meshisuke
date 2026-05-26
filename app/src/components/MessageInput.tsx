@@ -2,6 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import type { KeyboardEvent } from 'react';
 
 const COMMANDS = [
+  { cmd: '/add', desc: '食材・調味料の高速追加' },
+  { cmd: '/manage', desc: '対話的リソース管理モード（棚卸し等）' },
+  { cmd: '/check', desc: '緊急消費・アラート確認' },
   { cmd: '/pantry', desc: '食材・調味料の管理' },
   { cmd: '/history', desc: '食事履歴の確認' },
   { cmd: '/profile', desc: 'プロフィール・設定の確認' },
@@ -58,6 +61,11 @@ export function MessageInput({
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         setSelectedIndex(prev => (prev < filteredCommands.length - 1 ? prev + 1 : 0));
+        return;
+      }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        setText(filteredCommands[selectedIndex].cmd);
         return;
       }
       if (e.key === 'Enter' && !isComposing.current) {

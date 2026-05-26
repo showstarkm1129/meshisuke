@@ -1,4 +1,4 @@
-import systemPromptRaw from '../../../inbox/システムプロンプト.md?raw';
+import systemPromptRaw from '../../../システムプロンプト.md?raw';
 import type {
   AppDataState,
   Profile,

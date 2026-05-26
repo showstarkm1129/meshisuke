@@ -1,15 +1,6 @@
 {
   "ingredients": [
     {
-      "storage": "野菜室",
-      "quantity": 2,
-      "note": "",
-      "unit": "個",
-      "name": "玉ねぎ",
-      "purchased_at": "2026-05-03",
-      "expires_at": "2026-05-20"
-    },
-    {
       "note": "",
       "unit": "本",
       "storage": "野菜室",
@@ -17,15 +8,6 @@
       "purchased_at": "2026-05-03",
       "name": "にんじん",
       "expires_at": "2026-05-15"
-    },
-    {
-      "purchased_at": "2026-05-03",
-      "name": "じゃがいも",
-      "expires_at": "2026-05-22",
-      "note": "",
-      "unit": "個",
-      "storage": "常温",
-      "quantity": 4
     },
     {
       "storage": "野菜室",
@@ -37,33 +19,6 @@
       "purchased_at": "2026-05-06"
     },
     {
-      "note": "",
-      "unit": "個",
-      "storage": "野菜室",
-      "quantity": 2,
-      "expires_at": "2026-05-13",
-      "purchased_at": "2026-05-06",
-      "name": "ピーマン"
-    },
-    {
-      "expires_at": "2026-05-09",
-      "name": "鶏もも肉",
-      "purchased_at": "2026-05-07",
-      "storage": "冷蔵",
-      "quantity": 0,
-      "note": "今日明日中に使いたい",
-      "unit": "g"
-    },
-    {
-      "storage": "冷凍",
-      "quantity": 150,
-      "note": "",
-      "unit": "g",
-      "name": "豚こま肉",
-      "purchased_at": "2026-05-01",
-      "expires_at": "2026-06-01"
-    },
-    {
       "expires_at": "2026-05-16",
       "purchased_at": "2026-05-02",
       "name": "卵",
@@ -73,15 +28,6 @@
       "quantity": 5
     },
     {
-      "name": "牛乳",
-      "purchased_at": "2026-05-02",
-      "expires_at": "2026-05-09",
-      "storage": "冷蔵",
-      "quantity": 200,
-      "note": "",
-      "unit": "ml"
-    },
-    {
       "expires_at": "2026-05-11",
       "purchased_at": "2026-05-06",
       "name": "豆腐",
@@ -89,15 +35,6 @@
       "unit": "丁",
       "storage": "冷蔵",
       "quantity": 1
-    },
-    {
-      "storage": "冷蔵",
-      "quantity": 3,
-      "note": "",
-      "unit": "パック",
-      "name": "納豆",
-      "purchased_at": "2026-05-04",
-      "expires_at": "2026-05-14"
     },
     {
       "note": "残量目安",
@@ -116,6 +53,15 @@
       "quantity": 3,
       "note": "",
       "unit": "玉"
+    },
+    {
+      "name": "玉ねぎ",
+      "quantity": 10,
+      "unit": "個",
+      "purchased_at": "2026-05-25",
+      "expires_at": "2026-10-02",
+      "storage": "冷蔵",
+      "note": ""
     }
   ],
   "seasonings": [
@@ -218,5 +164,5 @@
       "amount_current": 100
     }
   ],
-  "updated_at": "2026-05-08"
+  "updated_at": "2026-05-25"
 }
