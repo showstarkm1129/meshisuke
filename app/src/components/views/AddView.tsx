@@ -199,16 +199,49 @@ export function AddView() {
           <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>数量</label>
-              <ClearableInput type="number" value={ingQuantity} onChange={e => setIngQuantity(e.target.value === '' ? '' : Number(e.target.value))} onClear={() => setIngQuantity('')} min="0" step="0.1" style={{ width: '100%', padding: '10px', fontSize: '1.1rem' }} />
+              <ClearableInput type="number" value={ingQuantity} onChange={e => setIngQuantity(e.target.value === '' ? '' : Number(e.target.value))} onClear={() => setIngQuantity('')} min="0" step={ingUnit === 'g' || ingUnit === 'ml' ? '10' : '0.1'} style={{ width: '100%', padding: '10px', fontSize: '1.1rem' }} />
               <div style={{ display: 'flex', gap: '4px', marginTop: '8px' }}>
-                <button type="button" onClick={() => addQuantity(setIngQuantity, 1)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+1</button>
-                <button type="button" onClick={() => addQuantity(setIngQuantity, 5)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+5</button>
-                <button type="button" onClick={() => addQuantity(setIngQuantity, 10)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+10</button>
+                {ingUnit === 'g' || ingUnit === 'ml' ? (
+                  <>
+                    <button type="button" onClick={() => addQuantity(setIngQuantity, 10)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+10</button>
+                    <button type="button" onClick={() => addQuantity(setIngQuantity, 50)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+50</button>
+                    <button type="button" onClick={() => addQuantity(setIngQuantity, 100)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+100</button>
+                  </>
+                ) : (
+                  <>
+                    <button type="button" onClick={() => addQuantity(setIngQuantity, 1)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+1</button>
+                    <button type="button" onClick={() => addQuantity(setIngQuantity, 5)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+5</button>
+                    <button type="button" onClick={() => addQuantity(setIngQuantity, 10)} style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid #ccc', background: '#f5f5f5', cursor: 'pointer', flex: 1 }}>+10</button>
+                  </>
+                )}
               </div>
             </div>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <label style={{ display: 'block', marginBottom: '4px', fontWeight: 'bold' }}>単位</label>
               <ClearableInput type="text" value={ingUnit} onChange={e => setIngUnit(e.target.value)} onClear={() => setIngUnit('')} placeholder="個, g, 枚など" style={{ width: '100%', padding: '10px', fontSize: '1.1rem' }} />
+              <div style={{ display: 'flex', gap: '4px', marginTop: '8px', flexWrap: 'wrap' }}>
+                {['個', 'g', '枚', '本'].map(u => (
+                  <button
+                    key={u}
+                    type="button"
+                    onClick={() => setIngUnit(u)}
+                    style={{
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      border: '1px solid #ccc',
+                      background: ingUnit === u ? '#e0f7fa' : '#f5f5f5',
+                      borderColor: ingUnit === u ? '#00bcd4' : '#ccc',
+                      color: ingUnit === u ? '#00838f' : '#333',
+                      fontWeight: ingUnit === u ? 'bold' : 'normal',
+                      cursor: 'pointer',
+                      flex: 1,
+                      minWidth: '40px'
+                    }}
+                  >
+                    {u}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 

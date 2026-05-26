@@ -62,6 +62,33 @@
       "expires_at": "2026-10-02",
       "storage": "冷蔵",
       "note": ""
+    },
+    {
+      "name": "海苔(2切り)",
+      "quantity": 100,
+      "unit": "個",
+      "purchased_at": "2026-05-26",
+      "expires_at": "2027-01-01",
+      "storage": "常温",
+      "note": "焼きのり"
+    },
+    {
+      "name": "えのき",
+      "quantity": 3,
+      "unit": "個",
+      "purchased_at": "2026-05-26",
+      "expires_at": "2026-06-08",
+      "storage": "冷蔵",
+      "note": ""
+    },
+    {
+      "name": "冷凍いちご",
+      "quantity": 400,
+      "unit": "g",
+      "purchased_at": "2026-05-26",
+      "expires_at": "2028-01-01",
+      "storage": "冷凍",
+      "note": ""
     }
   ],
   "seasonings": [
@@ -164,5 +191,5 @@
       "amount_current": 100
     }
   ],
-  "updated_at": "2026-05-25"
+  "updated_at": "2026-05-26"
 }
