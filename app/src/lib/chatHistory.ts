@@ -4,6 +4,8 @@ export type ChatTurn = {
   text: string;
   toolNotices?: string[];
   timestamp: number;
+  model?: string;
+  provider?: string;
 };
 
 export type ChatSession = {

@@ -161,6 +161,8 @@ export function useChat() {
           text: finalContent || '*(裏側でデータを整理しました)*',
           toolNotices: notices.length > 0 ? notices : undefined,
           timestamp: Date.now(),
+          model: settings.activeModel,
+          provider: settings.activeProvider,
         };
         updateCurrentSession([...newTurns, assistantTurn]);
       }

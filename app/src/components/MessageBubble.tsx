@@ -30,7 +30,14 @@ export function MessageBubble({
         <img src="/meshisuke2.png" alt="めし助" className="avatar" />
       )}
       <div className="message-content-wrapper">
-        <div className="message-label">{isUser ? 'あなた' : '🍳めし助'}</div>
+        <div className="message-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {isUser ? 'あなた' : '🍳めし助'}
+          {!isUser && turn.model && (
+            <span style={{ fontSize: '0.7em', color: '#aaa', fontWeight: 'normal' }}>
+              ({turn.provider === 'gemini' ? 'Gemini API' : 'OpenRouter'}: {turn.model})
+            </span>
+          )}
+        </div>
         <div className="message-bubble">
           {blocks.map((block, i) => {
             if (block.kind === 'markdown') {

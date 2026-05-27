@@ -97,15 +97,19 @@ export function SettingsModal({
 
           <section className="settings-section">
             <label className="section-label">モデル</label>
-            <select 
+            <input 
+              type="text"
+              list="provider-models"
+              placeholder="モデル名を入力または選択"
               value={settings.activeModel || ''} 
               onChange={e => setModel(e.target.value)}
-            >
-              <option value="" disabled>選択してください</option>
+              className="model-input"
+            />
+            <datalist id="provider-models">
               {PROVIDER_MODELS[currentProvider].map(m => (
-                <option key={m} value={m}>{m}</option>
+                <option key={m} value={m} />
               ))}
-            </select>
+            </datalist>
           </section>
 
           <section className="settings-section">
