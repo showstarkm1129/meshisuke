@@ -1,3 +1,9 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
 # Claude Code local workspace
 .claude/
 

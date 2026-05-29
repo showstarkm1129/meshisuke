@@ -1,168 +1,116 @@
 {
   "ingredients": [
     {
-      "note": "",
-      "unit": "本",
-      "storage": "野菜室",
-      "quantity": 1.5,
-      "purchased_at": "2026-05-03",
       "name": "にんじん",
-      "expires_at": "2026-05-15"
-    },
-    {
-      "storage": "野菜室",
       "quantity": 0.5,
+      "expires_at": "2026-05-15",
       "note": "",
-      "unit": "玉",
-      "expires_at": "2026-05-13",
-      "name": "キャベツ",
-      "purchased_at": "2026-05-06"
-    },
-    {
-      "expires_at": "2026-05-16",
-      "purchased_at": "2026-05-02",
-      "name": "卵",
-      "note": "",
-      "unit": "個",
-      "storage": "冷蔵",
-      "quantity": 5
-    },
-    {
-      "expires_at": "2026-05-11",
-      "purchased_at": "2026-05-06",
-      "name": "豆腐",
-      "note": "",
-      "unit": "丁",
-      "storage": "冷蔵",
-      "quantity": 1
-    },
-    {
-      "note": "残量目安",
-      "unit": "g",
-      "storage": "常温",
-      "quantity": 2000,
-      "purchased_at": "2026-04-20",
-      "name": "米",
-      "expires_at": "2026-08-20"
-    },
-    {
-      "expires_at": "2026-10-25",
-      "name": "冷凍うどん",
-      "purchased_at": "2026-04-25",
-      "storage": "冷凍",
-      "quantity": 3,
-      "note": "",
-      "unit": "玉"
+      "purchased_at": "2026-05-29",
+      "storage": "野菜室",
+      "unit": "本"
     },
     {
       "name": "玉ねぎ",
       "quantity": 10,
       "unit": "個",
-      "purchased_at": "2026-05-25",
-      "expires_at": "2026-10-02",
+      "purchased_at": "2026-05-29",
+      "expires_at": "2026-06-28",
+      "storage": "冷蔵",
+      "note": ""
+    },
+    {
+      "name": "海苔",
+      "quantity": 10,
+      "unit": "枚",
+      "purchased_at": "2026-05-29",
+      "expires_at": "2027-01-01",
+      "storage": "常温",
+      "note": ""
+    },
+    {
+      "name": "牛肉",
+      "quantity": 300,
+      "unit": "g",
+      "purchased_at": "2026-05-29",
+      "expires_at": "2026-06-01",
+      "storage": "冷蔵",
+      "note": ""
+    },
+    {
+      "name": "ぶどう",
+      "quantity": 200,
+      "unit": "g",
+      "purchased_at": "2026-05-29",
+      "expires_at": "2026-06-01",
+      "storage": "冷蔵",
+      "note": ""
+    },
+    {
+      "name": "米",
+      "quantity": 2000,
+      "unit": "g",
+      "purchased_at": "2026-05-29",
+      "expires_at": "2026-09-25",
+      "storage": "常温",
+      "note": ""
+    },
+    {
+      "name": "豚肉",
+      "quantity": 300,
+      "unit": "g",
+      "purchased_at": "2026-05-29",
+      "expires_at": "2026-06-01",
+      "storage": "冷蔵",
+      "note": ""
+    },
+    {
+      "name": "ネギ",
+      "quantity": 2,
+      "unit": "本",
+      "purchased_at": "2026-05-29",
+      "expires_at": "2026-07-08",
+      "storage": "冷蔵",
+      "note": ""
+    },
+    {
+      "name": "卵",
+      "quantity": 10,
+      "unit": "個",
+      "purchased_at": "2026-05-29",
+      "expires_at": "2026-07-01",
       "storage": "冷蔵",
       "note": ""
     }
   ],
   "seasonings": [
     {
-      "amount_full": 500,
-      "note": "",
-      "unit": "ml",
       "name": "醤油",
-      "amount_current": 250
-    },
-    {
-      "amount_current": 525,
-      "name": "味噌",
-      "note": "",
-      "unit": "g",
-      "amount_full": 750
-    },
-    {
-      "name": "塩",
-      "amount_current": 900,
-      "note": "",
-      "unit": "g",
-      "amount_full": 1000
-    },
-    {
-      "note": "",
-      "unit": "g",
-      "amount_full": 1000,
-      "amount_current": 800,
-      "name": "砂糖"
-    },
-    {
-      "note": "",
-      "unit": "ml",
-      "amount_full": 1000,
-      "name": "サラダ油",
-      "amount_current": 600
-    },
-    {
-      "amount_current": 60,
-      "name": "ごま油",
-      "amount_full": 150,
+      "amount_current": 235,
+      "amount_full": 500,
       "note": "",
       "unit": "ml"
     },
     {
-      "note": "",
-      "unit": "g",
-      "amount_full": 100,
-      "amount_current": 50,
-      "name": "顆粒だし"
-    },
-    {
-      "note": "",
-      "unit": "g",
-      "amount_full": 100,
-      "amount_current": 60,
-      "name": "中華スープの素"
-    },
-    {
-      "note": "顆粒",
-      "unit": "g",
-      "amount_full": 50,
-      "amount_current": 35,
-      "name": "コンソメ"
-    },
-    {
-      "amount_current": 350,
-      "name": "ケチャップ",
-      "note": "",
-      "unit": "g",
-      "amount_full": 500
-    },
-    {
-      "amount_full": 450,
-      "note": "",
-      "unit": "g",
-      "name": "マヨネーズ",
-      "amount_current": 135
-    },
-    {
-      "name": "オイスターソース",
-      "amount_current": 200,
-      "amount_full": 250,
+      "name": "味噌",
+      "amount_current": 513,
+      "amount_full": 750,
       "note": "",
       "unit": "g"
     },
     {
-      "name": "焼肉のたれ",
-      "amount_current": 200,
-      "amount_full": 400,
+      "name": "砂糖",
+      "amount_current": 790,
+      "amount_full": 1000,
       "note": "",
       "unit": "g"
     },
     {
-      "amount_full": 200,
-      "note": "中辛",
-      "unit": "g",
-      "name": "カレールー",
-      "amount_current": 100
+      "name": "塩",
+      "amount_current": 898,
+      "amount_full": 1000,
+      "note": "",
+      "unit": "g"
     }
   ],
-  "updated_at": "2026-05-25"
+  "updated_at": "2026-05-29"
 }

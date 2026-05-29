@@ -537,11 +537,34 @@
   cursor: pointer;
 }
 
-select {
+select, .model-input {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.model-history-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.history-tag {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.history-tag:hover {
+  background: #e0e0e0;
+  border-color: #999;
 }
 
 .modal-footer {

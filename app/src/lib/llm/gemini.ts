@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import type { LLMProvider, SendMessageRequest, SendMessageResponse, ChatMessage, ToolCall } from './types';
+import { formatProviderError, type ProviderErrorBody } from './errors';
+import { PROVIDER_LABELS } from './provider';
 
 export class GeminiProvider implements LLMProvider {
   private apiKey: string;
@@ -52,7 +54,10 @@ export class GeminiProvider implements LLMProvider {
       tools,
     };
 
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${req.model}:generateContent?key=${this.apiKey}`, {
+    // モデル名は自由入力欄から来るため、空白除去と URL エスケープを必須化する。
+    // 前後の空白・全角混入・スラッシュ等で 404/400 になるのを防ぐ。
+    const safeModel = encodeURIComponent(req.model.trim());
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${safeModel}:generateContent?key=${encodeURIComponent(this.apiKey)}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,24 +66,24 @@ export class GeminiProvider implements LLMProvider {
     });
 
     if (!res.ok) {
-      let detail = '';
+      const body: ProviderErrorBody = {};
+      let rawBody: unknown = null;
       try {
-        const errBody = await res.json();
-        const msg: string | undefined = errBody?.error?.message;
-        const details: unknown = errBody?.error?.details;
-        let retryDelay: string | undefined;
+        rawBody = await res.json();
+        const errObj = (rawBody as any)?.error;
+        body.message = errObj?.message;
+        const details: unknown = errObj?.details;
         if (Array.isArray(details)) {
           const retryInfo = details.find(
             (d: any) => d && typeof d.retryDelay === 'string'
           );
-          retryDelay = retryInfo?.retryDelay;
+          body.retryDelay = retryInfo?.retryDelay;
         }
-        if (msg) detail += ` - ${msg}`;
-        if (retryDelay) detail += ` (retry after ${retryDelay})`;
       } catch {
-        // ignore body parse failure
+        // body のパース失敗時は status だけで案内する
       }
-      throw new Error(`Gemini API error: ${res.status}${detail}`);
+      console.error('Gemini HTTP error', res.status, rawBody);
+      throw new Error(formatProviderError(PROVIDER_LABELS.gemini, res.status, body));
     }
 
     const data = await res.json();

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { LLMProvider, SendMessageRequest, SendMessageResponse, ChatMessage, ToolCall } from './types';
+import { formatProviderError, type ProviderErrorBody } from './errors';
+import { PROVIDER_LABELS } from './provider';
 
 export class OpenRouterProvider implements LLMProvider {
   private apiKey: string;
@@ -33,15 +35,18 @@ export class OpenRouterProvider implements LLMProvider {
     });
 
     if (!res.ok) {
-      let detail = '';
+      const body: ProviderErrorBody = {};
+      let rawBody: unknown = null;
       try {
-        const errBody = await res.json();
-        const msg: string | undefined = errBody?.error?.message ?? errBody?.message;
-        if (msg) detail += ` - ${msg}`;
+        rawBody = await res.json();
+        const errObj = (rawBody as any)?.error;
+        body.message = errObj?.message ?? (rawBody as any)?.message;
       } catch {
-        // ignore body parse failure
+        // body のパース失敗時は status だけで案内する
       }
-      throw new Error(`OpenRouter API error: ${res.status}${detail}`);
+      // 開発者向けの生レスポンスはコンソールに残し、UI には要約のみ throw する。
+      console.error('OpenRouter HTTP error', res.status, rawBody);
+      throw new Error(formatProviderError(PROVIDER_LABELS.openrouter, res.status, body));
     }
 
     const data = await res.json();
@@ -54,13 +59,22 @@ export class OpenRouterProvider implements LLMProvider {
     const toolCalls: ToolCall[] = [];
     if (message.tool_calls && Array.isArray(message.tool_calls)) {
       for (const tc of message.tool_calls) {
-        if (tc.type === 'function') {
-          toolCalls.push({
-            id: tc.id,
-            name: tc.function.name,
-            arguments: JSON.parse(tc.function.arguments),
-          });
+        if (tc.type !== 'function') continue;
+        // モデルが不完全な JSON を返した場合に SyntaxError が
+        // ErrorBanner に "Chat Error: ..." として漏れるのを防ぐ。
+        // 当該 tool_call だけスキップして他の出力は活かす。
+        let parsed: Record<string, unknown>;
+        try {
+          parsed = JSON.parse(tc.function.arguments) as Record<string, unknown>;
+        } catch (e) {
+          console.warn('Skipping tool_call with malformed arguments:', tc.function?.name, e);
+          continue;
         }
+        toolCalls.push({
+          id: tc.id,
+          name: tc.function.name,
+          arguments: parsed,
+        });
       }
     }
 

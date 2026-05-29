@@ -20,9 +20,21 @@ export function MessageBubble({
   const isUser = turn.role === 'user';
   
   const blocks = isUser ? [{ kind: 'markdown' as const, payload: turn.text }] : parseFenceBlocks(turn.text);
-  
-  const choicesBlock = blocks.find(b => b.kind === 'choices');
-  const choices = choicesBlock && choicesBlock.kind === 'choices' ? choicesBlock.payload : null;
+
+  // 1応答に :::choices フェンスは最大1個（システムプロンプトのルール）。
+  // 万一複数来た場合は **末尾の1つだけ** を採用する。
+  // 質問文は末尾配置という既存ルールと整合し、ユーザーが答えるべきは最後の問いだから。
+  const choicesBlocks = blocks.filter(b => b.kind === 'choices');
+  if (import.meta.env.DEV && choicesBlocks.length > 1) {
+    console.warn(
+      `[MessageBubble] AI returned ${choicesBlocks.length} :::choices fences in one response. ` +
+      `System prompt forbids this. Rendering only the last one. ` +
+      `Earlier choices were:`,
+      choicesBlocks.slice(0, -1).map(b => (b.kind === 'choices' ? b.payload : null))
+    );
+  }
+  const lastChoicesBlock = choicesBlocks.length > 0 ? choicesBlocks[choicesBlocks.length - 1] : null;
+  const choices = lastChoicesBlock && lastChoicesBlock.kind === 'choices' ? lastChoicesBlock.payload : null;
 
   return (
     <div className={`message-bubble-wrapper ${isUser ? 'user' : 'assistant'}`}>
@@ -30,7 +42,14 @@ export function MessageBubble({
         <img src="/meshisuke2.png" alt="めし助" className="avatar" />
       )}
       <div className="message-content-wrapper">
-        <div className="message-label">{isUser ? 'あなた' : '🍳めし助'}</div>
+        <div className="message-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {isUser ? 'あなた' : '🍳めし助'}
+          {!isUser && turn.model && (
+            <span style={{ fontSize: '0.7em', color: '#aaa', fontWeight: 'normal' }}>
+              ({turn.provider === 'gemini' ? 'Gemini API' : 'OpenRouter'}: {turn.model})
+            </span>
+          )}
+        </div>
         <div className="message-bubble">
           {blocks.map((block, i) => {
             if (block.kind === 'markdown') {
