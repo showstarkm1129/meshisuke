@@ -7,6 +7,8 @@ import type {
   MealRecord,
   WeightedItem,
 } from '../types/data.types';
+import { parseSections } from './promptSections';
+import { composePrompt, type ComposeResult, type ConversationState } from './promptComposer';
 
 const MEAL_HISTORY_LIMIT = 5;
 
@@ -78,8 +80,8 @@ function summarizeMealHistory(records: MealRecord[]): string {
     .join('\n');
 }
 
-export function buildSystemPrompt(data: AppDataState): string {
-  const dataSection = [
+function buildDataSection(data: AppDataState): string {
+  return [
     '## 現在のユーザーデータ（要約）',
     '',
     '### profile',
@@ -94,6 +96,51 @@ export function buildSystemPrompt(data: AppDataState): string {
     `### meal_history (直近 ${MEAL_HISTORY_LIMIT} 件)`,
     summarizeMealHistory(data.mealHistory),
   ].join('\n');
+}
 
-  return `${systemPromptRaw}\n\n---\n\n${dataSection}`;
+/**
+ * システムプロンプトを組み立てる。
+ *
+ * - `conversation` を渡さない場合: 従来通り全文（マーカーは除去）を返す。後方互換用。
+ * - `conversation` を渡した場合: 会話状態に応じてセクションを取捨選択して合成する。
+ */
+export function buildSystemPrompt(
+  data: AppDataState,
+  conversation?: ConversationState,
+): { prompt: string; debug: ComposeResult | null } {
+  const dataSection = buildDataSection(data);
+
+  if (!conversation) {
+    // 後方互換: マーカーだけ除去して全文返却
+    const stripped = stripSectionMarkers(systemPromptRaw);
+    return {
+      prompt: `${stripped}\n\n---\n\n${dataSection}`,
+      debug: null,
+    };
+  }
+
+  const parsed = parseSections(systemPromptRaw);
+
+  // パース失敗時は安全側で全文フォールバック
+  if (parsed.warnings.length > 0 && import.meta.env.DEV) {
+    console.warn('[PromptComposer] parse warnings:', parsed.warnings);
+  }
+  const hasAnySection = Object.values(parsed.sections).some(s => s.length > 0);
+  if (!hasAnySection) {
+    if (import.meta.env.DEV) {
+      console.warn('[PromptComposer] no sections detected, falling back to full prompt');
+    }
+    const stripped = stripSectionMarkers(systemPromptRaw);
+    return {
+      prompt: `${stripped}\n\n---\n\n${dataSection}`,
+      debug: null,
+    };
+  }
+
+  const result = composePrompt(parsed, conversation, dataSection, systemPromptRaw);
+  return { prompt: result.prompt, debug: result };
+}
+
+function stripSectionMarkers(raw: string): string {
+  return raw.replace(/<!--\s*@(end)?section:[\w-]+\s*-->\n?/g, '');
 }

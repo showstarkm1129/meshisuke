@@ -12,20 +12,6 @@ export function createProvider(name: ProviderName, apiKey: string): LLMProvider 
   }
 }
 
-export const PROVIDER_MODELS: Record<ProviderName, string[]> = {
-  openrouter: [
-    'deepseek/deepseek-chat',
-    'google/gemini-2.5-flash-lite',
-    'google/gemini-2.5-flash',
-    'anthropic/claude-haiku-4-5',
-  ],
-  gemini: [
-    'gemini-2.5-flash-lite',
-    'gemini-2.5-flash',
-    'gemini-2.5-pro',
-  ],
-};
-
 export const PROVIDER_LABELS: Record<ProviderName, string> = {
   openrouter: 'OpenRouter',
   gemini: 'Gemini Direct',

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSettings } from '../hooks/useSettings';
 import { useFileSaver } from '../hooks/useFileSaver';
 import { SaveMode } from '../types/data.types';
-import { PROVIDER_MODELS, PROVIDER_LABELS, type ProviderName } from '../lib/llm/provider';
+import { PROVIDER_LABELS, type ProviderName } from '../lib/llm/provider';
 
 export function SettingsModal({
   isOpen,
@@ -13,7 +13,7 @@ export function SettingsModal({
   onClose: () => void;
   forceOpen: boolean;
 }) {
-  const { settings, setProvider, setApiKey, setModel, setSaveMode, clearChatHistory, isConfigured } = useSettings();
+  const { settings, setProvider, setApiKey, setModel, addModelToHistory, setSaveMode, clearChatHistory, isConfigured } = useSettings();
   const { flushAll } = useFileSaver();
 
   const [inputKey, setInputKey] = useState('');
@@ -99,17 +99,27 @@ export function SettingsModal({
             <label className="section-label">モデル</label>
             <input 
               type="text"
-              list="provider-models"
-              placeholder="モデル名を入力または選択"
+              placeholder="モデル名を入力"
               value={settings.activeModel || ''} 
               onChange={e => setModel(e.target.value)}
+              onBlur={e => addModelToHistory(e.target.value)}
               className="model-input"
             />
-            <datalist id="provider-models">
-              {PROVIDER_MODELS[currentProvider].map(m => (
-                <option key={m} value={m} />
-              ))}
-            </datalist>
+            {settings.modelHistory[currentProvider] && settings.modelHistory[currentProvider].length > 0 && (
+              <div className="model-history-tags">
+                {settings.modelHistory[currentProvider].map(m => (
+                  <button 
+                    key={m} 
+                    className="history-tag" 
+                    onClick={() => setModel(m)}
+                    type="button"
+                    title={`${m}を選択`}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            )}
           </section>
 
           <section className="settings-section">
