@@ -1,0 +1,15 @@
+{
+  "name": "meshisuke",
+  "version": "0.0.0",
+  "private": true,
+  "description": "めし助プロジェクトの検証スタック入口。実体は app/ に委譲する。",
+  "scripts": {
+    "verify": "npm --prefix app run verify",
+    "verify:full": "npm --prefix app run verify:full",
+    "typecheck": "npm --prefix app run typecheck",
+    "lint": "npm --prefix app run lint",
+    "test": "npm --prefix app run test",
+    "build": "npm --prefix app run build",
+    "format:check": "npm --prefix app run format:check"
+  }
+}

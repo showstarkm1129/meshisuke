@@ -34,11 +34,5 @@ declare global {
     accept: Record<string, string | string[]>;
   }
 
-  type WellKnownDirectory =
-    | 'desktop'
-    | 'documents'
-    | 'downloads'
-    | 'music'
-    | 'pictures'
-    | 'videos';
+  type WellKnownDirectory = 'desktop' | 'documents' | 'downloads' | 'music' | 'pictures' | 'videos';
 }

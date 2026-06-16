@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
-import type { LLMProvider, SendMessageRequest, SendMessageResponse, ChatMessage, ToolCall } from './types';
+import type {
+  LLMProvider,
+  SendMessageRequest,
+  SendMessageResponse,
+  ChatMessage,
+  ToolCall,
+} from './types';
 import { formatProviderError, type ProviderErrorBody } from './errors';
 import { PROVIDER_LABELS } from './provider';
 
@@ -10,14 +16,14 @@ export class GeminiProvider implements LLMProvider {
   }
 
   async sendMessage(req: SendMessageRequest): Promise<SendMessageResponse> {
-    const systemMessage = req.messages.find(m => m.role === 'system');
-    const systemInstruction = systemMessage 
-      ? { parts: [{ text: systemMessage.content }] } 
+    const systemMessage = req.messages.find((m) => m.role === 'system');
+    const systemInstruction = systemMessage
+      ? { parts: [{ text: systemMessage.content }] }
       : undefined;
 
     const contents = req.messages
-      .filter(m => m.role !== 'system')
-      .map(m => this.formatMessage(m));
+      .filter((m) => m.role !== 'system')
+      .map((m) => this.formatMessage(m));
 
     const convertSchema = (schema: any): any => {
       if (!schema) return schema;
@@ -40,13 +46,18 @@ export class GeminiProvider implements LLMProvider {
       return result;
     };
 
-    const tools = req.tools.length > 0 ? [{
-      functionDeclarations: req.tools.map(t => ({
-        name: t.name,
-        description: t.description,
-        parameters: convertSchema(t.parameters),
-      }))
-    }] : undefined;
+    const tools =
+      req.tools.length > 0
+        ? [
+            {
+              functionDeclarations: req.tools.map((t) => ({
+                name: t.name,
+                description: t.description,
+                parameters: convertSchema(t.parameters),
+              })),
+            },
+          ]
+        : undefined;
 
     const payload = {
       contents,
@@ -57,13 +68,16 @@ export class GeminiProvider implements LLMProvider {
     // モデル名は自由入力欄から来るため、空白除去と URL エスケープを必須化する。
     // 前後の空白・全角混入・スラッシュ等で 404/400 になるのを防ぐ。
     const safeModel = encodeURIComponent(req.model.trim());
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${safeModel}:generateContent?key=${encodeURIComponent(this.apiKey)}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${safeModel}:generateContent?key=${encodeURIComponent(this.apiKey)}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
     if (!res.ok) {
       const body: ProviderErrorBody = {};
@@ -74,9 +88,7 @@ export class GeminiProvider implements LLMProvider {
         body.message = errObj?.message;
         const details: unknown = errObj?.details;
         if (Array.isArray(details)) {
-          const retryInfo = details.find(
-            (d: any) => d && typeof d.retryDelay === 'string'
-          );
+          const retryInfo = details.find((d: any) => d && typeof d.retryDelay === 'string');
           body.retryDelay = retryInfo?.retryDelay;
         }
       } catch {
@@ -120,7 +132,7 @@ export class GeminiProvider implements LLMProvider {
       const parts: any[] = [];
       if (msg.content) parts.push({ text: msg.content });
       if (msg.toolCalls) {
-        msg.toolCalls.forEach(tc => {
+        msg.toolCalls.forEach((tc) => {
           parts.push({ functionCall: { name: tc.name, args: tc.arguments } });
         });
       }
@@ -136,12 +148,14 @@ export class GeminiProvider implements LLMProvider {
       }
       return {
         role: 'function',
-        parts: [{
-          functionResponse: {
-            name: msg.name,
-            response: parsedResponse,
-          }
-        }]
+        parts: [
+          {
+            functionResponse: {
+              name: msg.name,
+              response: parsedResponse,
+            },
+          },
+        ],
       };
     }
     throw new Error(`Unknown/Unsupported role for Gemini: ${(msg as any).role}`);

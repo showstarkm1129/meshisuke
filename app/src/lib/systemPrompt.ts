@@ -15,7 +15,7 @@ const MEAL_HISTORY_LIMIT = 5;
 function summarizeWeighted(label: string, items: WeightedItem[] | null): string {
   if (items === null) return `- ${label}: 未確認`;
   if (items.length === 0) return `- ${label}: 該当なし（確認済み）`;
-  return `- ${label}: ${items.map(i => `${i.name}(w=${i.weight})`).join(', ')}`;
+  return `- ${label}: ${items.map((i) => `${i.name}(w=${i.weight})`).join(', ')}`;
 }
 
 function summarizeProfile(p: Profile | null): string {
@@ -37,9 +37,9 @@ function summarizeEquipment(e: Equipment | null): string {
   if (!e) return '(未設定)';
   const lines = [
     `- skill_level: ${e.skill_level}`,
-    `- appliances: ${e.appliances.map(a => a.name).join(', ') || 'なし'}`,
-    `- cookware: ${e.cookware.map(c => (c.size ? `${c.name}(${c.size})` : c.name)).join(', ') || 'なし'}`,
-    `- heat_sources: ${e.heat_sources.map(h => (h.burners ? `${h.name}×${h.burners}口` : h.name)).join(', ') || 'なし'}`,
+    `- appliances: ${e.appliances.map((a) => a.name).join(', ') || 'なし'}`,
+    `- cookware: ${e.cookware.map((c) => (c.size ? `${c.name}(${c.size})` : c.name)).join(', ') || 'なし'}`,
+    `- heat_sources: ${e.heat_sources.map((h) => (h.burners ? `${h.name}×${h.burners}口` : h.name)).join(', ') || 'なし'}`,
   ];
   if (e.constraints.length) lines.push(`- constraints: ${e.constraints.join(', ')}`);
   return lines.join('\n');
@@ -54,7 +54,9 @@ function summarizePantry(p: Pantry | null): string {
     lines.push('- ingredients:');
     for (const i of p.ingredients) {
       const noteSuffix = i.note ? ` (${i.note})` : '';
-      lines.push(`  - ${i.name}: ${i.quantity}${i.unit} / 期限${i.expires_at} / ${i.storage}${noteSuffix}`);
+      lines.push(
+        `  - ${i.name}: ${i.quantity}${i.unit} / 期限${i.expires_at} / ${i.storage}${noteSuffix}`
+      );
     }
   }
   if (p.seasonings.length === 0) {
@@ -73,7 +75,7 @@ function summarizeMealHistory(records: MealRecord[]): string {
   if (records.length === 0) return '(履歴なし)';
   const recent = records.slice(-MEAL_HISTORY_LIMIT);
   return recent
-    .map(r => {
+    .map((r) => {
       const sat = r.satisfaction === null ? '?' : String(r.satisfaction);
       return `- ${r.date} ${r.meal} ${r.menu} (${r.nutrition.kcal}kcal, ¥${r.cost_yen}, 満足=${sat})`;
     })
@@ -106,7 +108,7 @@ function buildDataSection(data: AppDataState): string {
  */
 export function buildSystemPrompt(
   data: AppDataState,
-  conversation?: ConversationState,
+  conversation?: ConversationState
 ): { prompt: string; debug: ComposeResult | null } {
   const dataSection = buildDataSection(data);
 
@@ -125,7 +127,7 @@ export function buildSystemPrompt(
   if (parsed.warnings.length > 0 && import.meta.env.DEV) {
     console.warn('[PromptComposer] parse warnings:', parsed.warnings);
   }
-  const hasAnySection = Object.values(parsed.sections).some(s => s.length > 0);
+  const hasAnySection = Object.values(parsed.sections).some((s) => s.length > 0);
   if (!hasAnySection) {
     if (import.meta.env.DEV) {
       console.warn('[PromptComposer] no sections detected, falling back to full prompt');

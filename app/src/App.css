@@ -105,7 +105,7 @@
 
 .delete-session-btn:hover {
   color: red;
-  background: rgba(255,0,0,0.1);
+  background: rgba(255, 0, 0, 0.1);
 }
 
 /* Header */
@@ -169,7 +169,7 @@
 
 .segment-control button.active {
   background: white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .settings-btn {
@@ -261,7 +261,8 @@
 .message-bubble p:last-child {
   margin-bottom: 0;
 }
-.message-bubble ul, .message-bubble ol {
+.message-bubble ul,
+.message-bubble ol {
   margin-top: 0;
   margin-bottom: 0.8em;
   padding-left: 20px;
@@ -339,13 +340,23 @@
 .loading-dots span {
   animation: blink 1.4s infinite both;
 }
-.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
 
 @keyframes blink {
-  0% { opacity: 0.2; }
-  20% { opacity: 1; }
-  100% { opacity: 0.2; }
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
 }
 
 /* Message Input */
@@ -362,7 +373,7 @@
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px 8px 0 0;
-  box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   z-index: 100;
   margin: 0 16px;
@@ -458,8 +469,11 @@
 /* Settings Modal */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -537,7 +551,8 @@
   cursor: pointer;
 }
 
-select, .model-input {
+select,
+.model-input {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;

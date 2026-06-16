@@ -9,36 +9,41 @@ export function useFolderPicker() {
   const [savedHandle, setSavedHandle] = useState<FileSystemDirectoryHandle | null>(null);
 
   useEffect(() => {
-    loadDirHandle().then(handle => {
-      if (handle) {
-        setSavedHandle(handle);
-      }
-    }).catch(console.error);
+    loadDirHandle()
+      .then((handle) => {
+        if (handle) {
+          setSavedHandle(handle);
+        }
+      })
+      .catch(console.error);
   }, []);
 
-  const verifyAndLoadHandle = useCallback(async (rootHandle: FileSystemDirectoryHandle) => {
-    const dataHandle = await findDataDirectory(rootHandle);
-    if (dataHandle === null) {
-      dispatch({
-        type: 'ADD_ERROR',
-        payload:
-          '選択されたフォルダに data/ ディレクトリが見つかりませんでした。めし助リポジトリのルートフォルダを選択してください。',
-      });
-      return;
-    }
+  const verifyAndLoadHandle = useCallback(
+    async (rootHandle: FileSystemDirectoryHandle) => {
+      const dataHandle = await findDataDirectory(rootHandle);
+      if (dataHandle === null) {
+        dispatch({
+          type: 'ADD_ERROR',
+          payload:
+            '選択されたフォルダに data/ ディレクトリが見つかりませんでした。めし助リポジトリのルートフォルダを選択してください。',
+        });
+        return;
+      }
 
-    const missing = await checkRequiredFiles(dataHandle);
-    if (missing.length > 0) {
-      dispatch({
-        type: 'ADD_ERROR',
-        payload: `data/ フォルダに必要なファイルが見つかりません: ${missing.join(', ')}`,
-      });
-      return;
-    }
+      const missing = await checkRequiredFiles(dataHandle);
+      if (missing.length > 0) {
+        dispatch({
+          type: 'ADD_ERROR',
+          payload: `data/ フォルダに必要なファイルが見つかりません: ${missing.join(', ')}`,
+        });
+        return;
+      }
 
-    await saveDirHandle(rootHandle);
-    dispatch({ type: 'SET_DIR_HANDLE', payload: rootHandle });
-  }, [dispatch]);
+      await saveDirHandle(rootHandle);
+      dispatch({ type: 'SET_DIR_HANDLE', payload: rootHandle });
+    },
+    [dispatch]
+  );
 
   const pickFolder = useCallback(async () => {
     if (!('showDirectoryPicker' in window)) {

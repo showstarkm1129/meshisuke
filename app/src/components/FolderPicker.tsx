@@ -25,14 +25,22 @@ export function FolderPicker() {
       <p>
         <small>（data/ フォルダが含まれているフォルダを選択してください）</small>
       </p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', marginTop: '16px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          alignItems: 'center',
+          marginTop: '16px',
+        }}
+      >
         <button type="button" onClick={() => void pickFolder()} disabled={state.isLoading}>
           {state.isLoading ? '読み込み中...' : '新しいフォルダを選択'}
         </button>
         {savedHandle && !state.isLoading && (
-          <button 
-            type="button" 
-            onClick={() => void resumeFolder()} 
+          <button
+            type="button"
+            onClick={() => void resumeFolder()}
             style={{ background: '#4CAF50' }}
           >
             前回のフォルダ ({savedHandle.name}) で再開

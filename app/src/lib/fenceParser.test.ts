@@ -30,7 +30,7 @@ describe('parseFenceBlocks', () => {
 鶏もも 200g
 :::`;
     const result = parseFenceBlocks(text);
-    const pantryBlock = result.find(b => b.kind === 'pantry');
+    const pantryBlock = result.find((b) => b.kind === 'pantry');
     expect(pantryBlock).toBeDefined();
     expect(pantryBlock?.kind === 'pantry' && pantryBlock.payload).toContain('玉ねぎ');
   });
@@ -54,7 +54,7 @@ describe('parseFenceBlocks', () => {
 15分以内|30分以内|60分以内|それ以上
 :::`;
     const result = parseFenceBlocks(text);
-    const choices = result.filter(b => b.kind === 'choices');
+    const choices = result.filter((b) => b.kind === 'choices');
     expect(choices.length).toBe(2);
     expect(choices[0].kind === 'choices' && choices[0].payload).toEqual([
       'さっぱり',
@@ -82,7 +82,7 @@ describe('parseFenceBlocks', () => {
 A|B
 :::`;
     const result = parseFenceBlocks(text);
-    const kinds = result.map(b => b.kind);
+    const kinds = result.map((b) => b.kind);
     // markdown -> pantry -> markdown -> choices の順
     expect(kinds).toEqual(['markdown', 'pantry', 'markdown', 'choices']);
   });
@@ -92,10 +92,7 @@ A|B
   はい  |  いいえ
 :::`;
     const result = parseFenceBlocks(text);
-    const choicesBlock = result.find(b => b.kind === 'choices');
-    expect(choicesBlock?.kind === 'choices' && choicesBlock.payload).toEqual([
-      'はい',
-      'いいえ',
-    ]);
+    const choicesBlock = result.find((b) => b.kind === 'choices');
+    expect(choicesBlock?.kind === 'choices' && choicesBlock.payload).toEqual(['はい', 'いいえ']);
   });
 });

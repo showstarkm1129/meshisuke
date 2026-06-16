@@ -8,15 +8,14 @@ import type { ResourceKey } from './views/ManageView';
 
 export type TargetItemIndices = Partial<Record<ResourceKey, number[]>>;
 
-export function ChatView({ 
-  turns, 
-  isWaiting, 
+export function ChatView({
+  turns,
+  isWaiting,
   currentToolNotices,
-  onSend, 
+  onSend,
   onCommand,
-  onManageStart
-
-}: { 
+  onManageStart,
+}: {
   turns: ChatTurn[];
   isWaiting: boolean;
   currentToolNotices?: string[];
@@ -26,7 +25,7 @@ export function ChatView({
 }) {
   const { isConfigured } = useSettings();
   const { state } = useAppState();
-  
+
   const [showManage, setShowManage] = useState(false);
   const [manageStep, setManageStep] = useState<1 | 2>(1);
   const [selectedManageKeys, setSelectedManageKeys] = useState<ResourceKey[]>([]);
@@ -43,21 +42,30 @@ export function ChatView({
     }
   };
 
-  const ALL_MANAGE_KEYS: ResourceKey[] = ['食材', '調味料', '食事履歴', 'アレルギー', '嫌い物', '好み物', '調理器具', '基本情報'];
+  const ALL_MANAGE_KEYS: ResourceKey[] = [
+    '食材',
+    '調味料',
+    '食事履歴',
+    'アレルギー',
+    '嫌い物',
+    '好み物',
+    '調理器具',
+    '基本情報',
+  ];
 
   const toggleManageKey = (key: ResourceKey) => {
     if (selectedManageKeys.includes(key)) {
-      setSelectedManageKeys(selectedManageKeys.filter(k => k !== key));
+      setSelectedManageKeys(selectedManageKeys.filter((k) => k !== key));
     } else {
       setSelectedManageKeys([...selectedManageKeys, key]);
     }
   };
 
   const toggleItemIndex = (key: ResourceKey, index: number) => {
-    setSelectedIndices(prev => {
+    setSelectedIndices((prev) => {
       const current = prev[key] || [];
       if (current.includes(index)) {
-        return { ...prev, [key]: current.filter(i => i !== index) };
+        return { ...prev, [key]: current.filter((i) => i !== index) };
       } else {
         return { ...prev, [key]: [...current, index] };
       }
@@ -88,7 +96,7 @@ export function ChatView({
     if (key === 'アレルギー' && profile) items = profile.allergies || [];
     if (key === '嫌い物' && profile) items = profile.dislikes || [];
     if (key === '好み物' && profile) items = profile.favorites || [];
-    
+
     // Some keys don't have item lists (e.g., 基本情報, 食事履歴)
     if (items.length === 0) return null;
 
@@ -99,14 +107,24 @@ export function ChatView({
           {items.map((item, idx) => {
             const isChecked = selectedIndices[key]?.includes(idx) ?? false;
             return (
-              <label key={idx} style={{ 
-                display: 'flex', alignItems: 'center', gap: '4px', background: isChecked ? '#e8f5e9' : '#fff', 
-                border: '1px solid #ccc', padding: '4px 8px', borderRadius: '4px', fontSize: '0.85rem', cursor: 'pointer' 
-              }}>
-                <input 
-                  type="checkbox" 
-                  checked={isChecked} 
-                  onChange={() => toggleItemIndex(key, idx)} 
+              <label
+                key={idx}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  background: isChecked ? '#e8f5e9' : '#fff',
+                  border: '1px solid #ccc',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={() => toggleItemIndex(key, idx)}
                 />
                 {item.name || `項目 ${idx + 1}`}
               </label>
@@ -119,19 +137,19 @@ export function ChatView({
 
   return (
     <div className="chat-view">
-      <MessageList 
-        turns={turns} 
-        isWaiting={isWaiting} 
-        currentToolNotices={currentToolNotices} 
+      <MessageList
+        turns={turns}
+        isWaiting={isWaiting}
+        currentToolNotices={currentToolNotices}
         onSend={onSend}
       />
       {showManage && manageStep === 1 && (
         <div style={{ padding: '10px 20px', background: '#f0f0f0', borderTop: '1px solid #ccc' }}>
           <div style={{ marginBottom: '10px', fontWeight: 'bold' }}>何を管理する？</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '10px' }}>
-            {ALL_MANAGE_KEYS.map(key => (
-              <button 
-                key={key} 
+            {ALL_MANAGE_KEYS.map((key) => (
+              <button
+                key={key}
                 onClick={() => toggleManageKey(key)}
                 style={{
                   padding: '6px 12px',
@@ -139,7 +157,7 @@ export function ChatView({
                   border: '1px solid #ccc',
                   background: selectedManageKeys.includes(key) ? '#4caf50' : '#fff',
                   color: selectedManageKeys.includes(key) ? '#fff' : '#333',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 {key}
@@ -147,25 +165,83 @@ export function ChatView({
             ))}
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <button onClick={nextStep} disabled={selectedManageKeys.length === 0} style={{ padding: '6px 16px', background: '#2196f3', color: '#fff', border: 'none', borderRadius: '4px', cursor: selectedManageKeys.length === 0 ? 'not-allowed' : 'pointer', opacity: selectedManageKeys.length === 0 ? 0.5 : 1 }}>次へ</button>
-            <button onClick={() => setShowManage(false)} style={{ padding: '6px 16px', background: '#e0e0e0', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>キャンセル</button>
+            <button
+              onClick={nextStep}
+              disabled={selectedManageKeys.length === 0}
+              style={{
+                padding: '6px 16px',
+                background: '#2196f3',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: selectedManageKeys.length === 0 ? 'not-allowed' : 'pointer',
+                opacity: selectedManageKeys.length === 0 ? 0.5 : 1,
+              }}
+            >
+              次へ
+            </button>
+            <button
+              onClick={() => setShowManage(false)}
+              style={{
+                padding: '6px 16px',
+                background: '#e0e0e0',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              キャンセル
+            </button>
           </div>
         </div>
       )}
       {showManage && manageStep === 2 && (
-        <div style={{ padding: '10px 20px', background: '#f0f0f0', borderTop: '1px solid #ccc', maxHeight: '300px', overflowY: 'auto' }}>
-          <div style={{ marginBottom: '10px', fontWeight: 'bold' }}>管理するリソース（アイテム）を選択</div>
+        <div
+          style={{
+            padding: '10px 20px',
+            background: '#f0f0f0',
+            borderTop: '1px solid #ccc',
+            maxHeight: '300px',
+            overflowY: 'auto',
+          }}
+        >
+          <div style={{ marginBottom: '10px', fontWeight: 'bold' }}>
+            管理するリソース（アイテム）を選択
+          </div>
           {selectedManageKeys.map(renderChecklist)}
           <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-            <button onClick={submitManage} style={{ padding: '6px 16px', background: '#2196f3', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>決定</button>
-            <button onClick={() => setManageStep(1)} style={{ padding: '6px 16px', background: '#e0e0e0', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>戻る</button>
+            <button
+              onClick={submitManage}
+              style={{
+                padding: '6px 16px',
+                background: '#2196f3',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              決定
+            </button>
+            <button
+              onClick={() => setManageStep(1)}
+              style={{
+                padding: '6px 16px',
+                background: '#e0e0e0',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              戻る
+            </button>
           </div>
         </div>
       )}
-      <MessageInput 
-        onSend={onSend} 
+      <MessageInput
+        onSend={onSend}
         onCommand={handleCommand}
-        disabled={isWaiting || !isConfigured} 
+        disabled={isWaiting || !isConfigured}
       />
     </div>
   );

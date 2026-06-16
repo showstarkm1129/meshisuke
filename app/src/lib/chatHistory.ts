@@ -39,7 +39,7 @@ export function loadSessions(): ChatSession[] {
         const existingData = localStorage.getItem(KEY_SESSIONS);
         let existingSessions = [];
         if (existingData) {
-            existingSessions = JSON.parse(existingData);
+          existingSessions = JSON.parse(existingData);
         }
         const newSessions = [...existingSessions, migratedSession];
         saveSessions(newSessions);
@@ -64,9 +64,9 @@ export function loadSessions(): ChatSession[] {
 
 export function saveSessions(sessions: ChatSession[]): void {
   try {
-    const toStore = sessions.map(s => ({
+    const toStore = sessions.map((s) => ({
       ...s,
-      turns: s.turns.slice(-MAX_TURNS_PER_SESSION)
+      turns: s.turns.slice(-MAX_TURNS_PER_SESSION),
     }));
     localStorage.setItem(KEY_SESSIONS, JSON.stringify(toStore));
   } catch (e) {

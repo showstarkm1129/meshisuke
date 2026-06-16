@@ -35,7 +35,8 @@ export interface ComposeResult {
 }
 
 /** 裏側モードに切り替わるトリガー語 */
-const BACKSIDE_TRIGGER_REGEX = /(裏側|うらがわ|裏モード|データ見せ|データ確認|スキーマ|JSON|デバッグ|中身確認|設定確認)/i;
+const BACKSIDE_TRIGGER_REGEX =
+  /(裏側|うらがわ|裏モード|データ見せ|データ確認|スキーマ|JSON|デバッグ|中身確認|設定確認)/i;
 
 export function isBacksideTrigger(text: string | null | undefined): boolean {
   if (!text) return false;
@@ -70,7 +71,7 @@ export function composePrompt(
   parsed: ParsedSections,
   state: ConversationState,
   dataSection: string,
-  baselineRaw: string,
+  baselineRaw: string
 ): ComposeResult {
   const ids = decideSections(state);
   const parts: string[] = [];

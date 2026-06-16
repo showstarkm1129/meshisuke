@@ -5,7 +5,7 @@ export function Header({
   viewMode,
   onViewModeChange,
   onOpenSettings,
-  onToggleSidebar
+  onToggleSidebar,
 }: {
   viewMode: string;
   onViewModeChange: (m: string) => void;
@@ -13,7 +13,9 @@ export function Header({
   onToggleSidebar: () => void;
 }) {
   const { settings, setProvider } = useSettings();
-  const availableProviders = (Object.keys(settings.apiKeys) as ProviderName[]).filter(p => settings.apiKeys[p]);
+  const availableProviders = (Object.keys(settings.apiKeys) as ProviderName[]).filter(
+    (p) => settings.apiKeys[p]
+  );
 
   return (
     <header className="app-header">
@@ -26,14 +28,14 @@ export function Header({
       </div>
       <div className="header-center">
         <div className="segment-control">
-          <button 
-            className={viewMode === 'chat' ? 'active' : ''} 
+          <button
+            className={viewMode === 'chat' ? 'active' : ''}
             onClick={() => onViewModeChange('chat')}
           >
             チャット
           </button>
-          <button 
-            className={viewMode === 'backside' ? 'active' : ''} 
+          <button
+            className={viewMode === 'backside' ? 'active' : ''}
             onClick={() => onViewModeChange('backside')}
           >
             裏側
@@ -42,14 +44,22 @@ export function Header({
       </div>
       <div className="header-right" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {availableProviders.length > 1 && (
-          <select 
-            value={settings.activeProvider || ''} 
-            onChange={e => setProvider(e.target.value as ProviderName)}
-            style={{ fontSize: '0.8rem', padding: '4px', borderRadius: '4px', border: '1px solid #ccc', background: '#fff' }}
+          <select
+            value={settings.activeProvider || ''}
+            onChange={(e) => setProvider(e.target.value as ProviderName)}
+            style={{
+              fontSize: '0.8rem',
+              padding: '4px',
+              borderRadius: '4px',
+              border: '1px solid #ccc',
+              background: '#fff',
+            }}
             title="使用するAIプロバイダーを切り替え"
           >
-            {availableProviders.map(p => (
-              <option key={p} value={p}>{PROVIDER_LABELS[p]}</option>
+            {availableProviders.map((p) => (
+              <option key={p} value={p}>
+                {PROVIDER_LABELS[p]}
+              </option>
             ))}
           </select>
         )}

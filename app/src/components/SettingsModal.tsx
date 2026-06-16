@@ -7,17 +7,26 @@ import { PROVIDER_LABELS, type ProviderName } from '../lib/llm/provider';
 export function SettingsModal({
   isOpen,
   onClose,
-  forceOpen
+  forceOpen,
 }: {
   isOpen: boolean;
   onClose: () => void;
   forceOpen: boolean;
 }) {
-  const { settings, setProvider, setApiKey, setModel, addModelToHistory, setSaveMode, clearChatHistory, isConfigured } = useSettings();
+  const {
+    settings,
+    setProvider,
+    setApiKey,
+    setModel,
+    addModelToHistory,
+    setSaveMode,
+    clearChatHistory,
+    isConfigured,
+  } = useSettings();
   const { flushAll } = useFileSaver();
 
   const [inputKey, setInputKey] = useState('');
-  
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setInputKey('');
@@ -50,20 +59,22 @@ export function SettingsModal({
         <div className="modal-header">
           <h2>設定</h2>
           {!forceOpen && (
-            <button className="close-btn" onClick={handleClose}>×</button>
+            <button className="close-btn" onClick={handleClose}>
+              ×
+            </button>
           )}
         </div>
-        
+
         <div className="modal-body">
           <section className="settings-section">
             <label className="section-label">プロバイダー</label>
             <div className="radio-group">
-              {(Object.keys(PROVIDER_LABELS) as ProviderName[]).map(p => (
+              {(Object.keys(PROVIDER_LABELS) as ProviderName[]).map((p) => (
                 <label key={p}>
-                  <input 
-                    type="radio" 
-                    name="provider" 
-                    value={p} 
+                  <input
+                    type="radio"
+                    name="provider"
+                    value={p}
                     checked={currentProvider === p}
                     onChange={() => setProvider(p)}
                   />
@@ -83,11 +94,11 @@ export function SettingsModal({
                 </>
               ) : (
                 <>
-                  <input 
-                    type="password" 
-                    placeholder="APIキーを入力..." 
+                  <input
+                    type="password"
+                    placeholder="APIキーを入力..."
                     value={inputKey}
-                    onChange={e => setInputKey(e.target.value)}
+                    onChange={(e) => setInputKey(e.target.value)}
                   />
                   <button onClick={handleSaveKey}>保存</button>
                 </>
@@ -97,47 +108,48 @@ export function SettingsModal({
 
           <section className="settings-section">
             <label className="section-label">モデル</label>
-            <input 
+            <input
               type="text"
               placeholder="モデル名を入力"
-              value={settings.activeModel || ''} 
-              onChange={e => setModel(e.target.value)}
-              onBlur={e => addModelToHistory(e.target.value)}
+              value={settings.activeModel || ''}
+              onChange={(e) => setModel(e.target.value)}
+              onBlur={(e) => addModelToHistory(e.target.value)}
               className="model-input"
             />
-            {settings.modelHistory[currentProvider] && settings.modelHistory[currentProvider].length > 0 && (
-              <div className="model-history-tags">
-                {settings.modelHistory[currentProvider].map(m => (
-                  <button 
-                    key={m} 
-                    className="history-tag" 
-                    onClick={() => setModel(m)}
-                    type="button"
-                    title={`${m}を選択`}
-                  >
-                    {m}
-                  </button>
-                ))}
-              </div>
-            )}
+            {settings.modelHistory[currentProvider] &&
+              settings.modelHistory[currentProvider].length > 0 && (
+                <div className="model-history-tags">
+                  {settings.modelHistory[currentProvider].map((m) => (
+                    <button
+                      key={m}
+                      className="history-tag"
+                      onClick={() => setModel(m)}
+                      type="button"
+                      title={`${m}を選択`}
+                    >
+                      {m}
+                    </button>
+                  ))}
+                </div>
+              )}
           </section>
 
           <section className="settings-section">
             <label className="section-label">保存モード</label>
             <div className="radio-group">
               <label>
-                <input 
-                  type="radio" 
-                  name="saveMode" 
+                <input
+                  type="radio"
+                  name="saveMode"
                   checked={settings.saveMode === SaveMode.Auto}
                   onChange={() => setSaveMode(SaveMode.Auto)}
                 />
                 自動
               </label>
               <label>
-                <input 
-                  type="radio" 
-                  name="saveMode" 
+                <input
+                  type="radio"
+                  name="saveMode"
                   checked={settings.saveMode === SaveMode.Manual}
                   onChange={() => setSaveMode(SaveMode.Manual)}
                 />
@@ -145,7 +157,7 @@ export function SettingsModal({
               </label>
             </div>
             {settings.saveMode === SaveMode.Manual && (
-              <button 
+              <button
                 className="action-btn"
                 onClick={() => flushAll()}
                 style={{ marginTop: '8px' }}
@@ -156,8 +168,8 @@ export function SettingsModal({
           </section>
 
           <section className="settings-section">
-            <button 
-              className="danger-btn" 
+            <button
+              className="danger-btn"
               onClick={() => {
                 if (window.confirm('チャット履歴を消去しますか？')) {
                   clearChatHistory();
@@ -171,8 +183,8 @@ export function SettingsModal({
         </div>
 
         <div className="modal-footer">
-          <button 
-            className="primary-btn" 
+          <button
+            className="primary-btn"
             onClick={handleClose}
             disabled={forceOpen && !isConfigured}
           >

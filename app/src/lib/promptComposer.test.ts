@@ -115,7 +115,7 @@ describe('composePrompt', () => {
       parsed,
       { ...baseState, turnsCount: 3, onboardingCompleted: true, lastUserText: 'やあ' },
       'DATA_SECTION',
-      baselineRaw,
+      baselineRaw
     );
     expect(res.prompt).toContain('CORE_BODY');
     expect(res.prompt).toContain('CONTINUING_BODY');
@@ -130,7 +130,7 @@ describe('composePrompt', () => {
       parsed,
       { ...baseState, turnsCount: 3, onboardingCompleted: true, lastUserText: '裏側' },
       'DATA',
-      baselineRaw,
+      baselineRaw
     );
     expect(res.prompt).toContain('BACKSIDE_BODY');
     expect(res.includedSections).toEqual(['core', 'continuing', 'backside']);
@@ -141,7 +141,7 @@ describe('composePrompt', () => {
       parsed,
       { ...baseState, turnsCount: 3, onboardingCompleted: true, lastUserText: 'やあ' },
       'DATA',
-      baselineRaw,
+      baselineRaw
     );
     expect(res.baselineLines).toBe(10);
     expect(res.composedLines).toBeGreaterThan(0);
@@ -160,7 +160,7 @@ describe('composePrompt', () => {
       partial,
       { ...baseState, turnsCount: 3, onboardingCompleted: true, lastUserText: 'やあ' },
       'DATA',
-      baselineRaw,
+      baselineRaw
     );
     expect(res.prompt).toContain('CORE');
     expect(res.prompt).toContain('CONT');

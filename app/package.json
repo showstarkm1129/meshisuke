@@ -11,7 +11,10 @@
     "format": "prettier --write src/",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "format:check": "prettier --check src/",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm run test",
+    "verify:full": "npm run typecheck && npm run lint && npm run test && npm run build"
   },
   "dependencies": {
     "react": "^19.2.6",

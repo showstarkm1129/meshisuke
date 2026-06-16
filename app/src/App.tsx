@@ -18,7 +18,15 @@ import { CheckView } from './components/views/CheckView';
 import { AddView } from './components/views/AddView';
 import './App.css';
 
-export type ViewMode = 'chat' | 'backside' | 'pantry' | 'history' | 'profile' | 'manage' | 'check' | 'add';
+export type ViewMode =
+  | 'chat'
+  | 'backside'
+  | 'pantry'
+  | 'history'
+  | 'profile'
+  | 'manage'
+  | 'check'
+  | 'add';
 
 function App() {
   const { state } = useAppState();
@@ -45,10 +53,18 @@ function App() {
       case '/add':
         setViewMode('add');
         break;
-      case '/pantry': setViewMode('pantry'); break;
-      case '/history': setViewMode('history'); break;
-      case '/profile': setViewMode('profile'); break;
-      case '/settings': setSettingsOpen(true); break;
+      case '/pantry':
+        setViewMode('pantry');
+        break;
+      case '/history':
+        setViewMode('history');
+        break;
+      case '/profile':
+        setViewMode('profile');
+        break;
+      case '/settings':
+        setSettingsOpen(true);
+        break;
       case '/clear':
         if (window.confirm('チャット履歴を消去しますか？')) {
           chatState.clearHistory();
@@ -56,7 +72,11 @@ function App() {
         }
         break;
       case '/hearing':
-        if (window.confirm('初期設定（オンボーディング）をやり直しますか？（現在のデータは維持したまま、ヒアリングを最初からやり直します）')) {
+        if (
+          window.confirm(
+            '初期設定（オンボーディング）をやり直しますか？（現在のデータは維持したまま、ヒアリングを最初からやり直します）'
+          )
+        ) {
           chatState.sendUserMessage('リセットしたい');
         }
         break;
@@ -67,14 +87,14 @@ function App() {
 
   const renderView = () => {
     switch (viewMode) {
-      case 'chat': 
+      case 'chat':
         return (
-          <ChatView 
+          <ChatView
             turns={chatState.turns}
             isWaiting={chatState.isWaiting}
             currentToolNotices={chatState.currentToolNotices}
             onSend={chatState.sendUserMessage}
-            onCommand={handleCommand} 
+            onCommand={handleCommand}
             onManageStart={(keys, indices) => {
               setManageKeys(keys);
               setManageIndices(indices || {});
@@ -82,21 +102,28 @@ function App() {
             }}
           />
         );
-      case 'backside': return <BacksideView onCommand={handleCommand} />;
-      case 'pantry': return <PantryView />;
-      case 'history': return <HistoryView />;
-      case 'profile': return <ProfileView />;
-      case 'manage': return <ManageView selectedKeys={manageKeys} targetIndices={manageIndices} />;
-      case 'check': return <CheckView />;
-      case 'add': return <AddView />;
-      default: 
+      case 'backside':
+        return <BacksideView onCommand={handleCommand} />;
+      case 'pantry':
+        return <PantryView />;
+      case 'history':
+        return <HistoryView />;
+      case 'profile':
+        return <ProfileView />;
+      case 'manage':
+        return <ManageView selectedKeys={manageKeys} targetIndices={manageIndices} />;
+      case 'check':
+        return <CheckView />;
+      case 'add':
+        return <AddView />;
+      default:
         return (
-          <ChatView 
+          <ChatView
             turns={chatState.turns}
             isWaiting={chatState.isWaiting}
             currentToolNotices={chatState.currentToolNotices}
             onSend={chatState.sendUserMessage}
-            onCommand={handleCommand} 
+            onCommand={handleCommand}
           />
         );
     }

@@ -1,7 +1,7 @@
 export type ChatRole = 'system' | 'user' | 'assistant' | 'tool';
 
 export type ToolCall = {
-  id: string;              // OpenRouter は tool_call_id, Gemini は内部生成
+  id: string; // OpenRouter は tool_call_id, Gemini は内部生成
   name: string;
   arguments: Record<string, unknown>;
 };
@@ -15,7 +15,7 @@ export type ChatMessage =
 export type ToolDefinition = {
   name: string;
   description: string;
-  parameters: Record<string, unknown>;  // JSON Schema
+  parameters: Record<string, unknown>; // JSON Schema
 };
 
 export type SendMessageRequest = {

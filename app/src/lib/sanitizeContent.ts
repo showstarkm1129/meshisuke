@@ -31,7 +31,7 @@ function stripControlTokens(text: string): string {
   // セグメント終端は <|end|> / <|return|> / 次の <|start|> / 文字列末尾。
   out = out.replace(
     /<\|channel\|>\s*(?:analysis|commentary)\b[\s\S]*?(?:<\|end\|>|<\|return\|>|(?=<\|start\|>)|$)/gi,
-    '',
+    ''
   );
   // final チャネルはユーザー向け本文。マーカーだけ除去して中身は残す。
   out = out.replace(/<\|channel\|>\s*final\b[\s\S]*?<\|message\|>/gi, '');
@@ -84,14 +84,14 @@ function looksLikeToolCall(jsonText: string): boolean {
   if (/"(arguments|tool_call|tool_calls|function)"\s*:/.test(jsonText)) return true;
   // "name" と引数ルートキーの両方を含む（{"name":...,"items":[...]} 等）
   const hasName = /"name"\s*:/.test(jsonText);
-  const hasArgRoot = ARG_ROOT_KEYS.some(k => new RegExp(`"${k}"\\s*:`).test(jsonText));
+  const hasArgRoot = ARG_ROOT_KEYS.some((k) => new RegExp(`"${k}"\\s*:`).test(jsonText));
   if (hasName && hasArgRoot) return true;
   // 引数ルートキーで始まる単体オブジェクト（{"items":[...]} 等）。JSON.parse 可能なら確証
   if (hasArgRoot) {
     try {
       const obj = JSON.parse(jsonText);
       if (obj && typeof obj === 'object') {
-        return ARG_ROOT_KEYS.some(k => k in obj);
+        return ARG_ROOT_KEYS.some((k) => k in obj);
       }
     } catch {
       // パース不能でもルートキーを含むなら漏れの可能性が高い

@@ -2,14 +2,14 @@ import { PantryView } from './PantryView';
 import { ProfileView } from './ProfileView';
 import { HistoryView } from './HistoryView';
 
-export type ResourceKey = 
-  | '食材' 
-  | '調味料' 
-  | '食事履歴' 
-  | 'アレルギー' 
-  | '嫌い物' 
-  | '好み物' 
-  | '調理器具' 
+export type ResourceKey =
+  | '食材'
+  | '調味料'
+  | '食事履歴'
+  | 'アレルギー'
+  | '嫌い物'
+  | '好み物'
+  | '調理器具'
   | '基本情報';
 
 import type { TargetItemIndices } from '../ChatView';
@@ -35,7 +35,12 @@ export function ManageView({ selectedKeys, targetIndices }: ManageViewProps) {
 
   const needsPantry = showPantryIngredients || showPantrySeasonings;
   const needsHistory = showHistory;
-  const needsProfile = showProfileAllergies || showProfileDislikes || showProfileFavorites || showProfileEquipment || showProfileBasic;
+  const needsProfile =
+    showProfileAllergies ||
+    showProfileDislikes ||
+    showProfileFavorites ||
+    showProfileEquipment ||
+    showProfileBasic;
 
   const pantrySections: ('ingredients' | 'seasonings')[] = [];
   if (showPantryIngredients) pantrySections.push('ingredients');
@@ -49,9 +54,33 @@ export function ManageView({ selectedKeys, targetIndices }: ManageViewProps) {
   if (showProfileBasic) profileSections.push('basic');
 
   return (
-    <div className="view-container manage-view" style={{ overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px' }}>
-      {needsPantry && <PantryView hideTitle visibleSections={pantrySections} isEmbedded targetIndices={targetIndices} />}
-      {needsProfile && <ProfileView hideTitle visibleSections={profileSections} isEmbedded targetIndices={targetIndices} />}
+    <div
+      className="view-container manage-view"
+      style={{
+        overflowY: 'auto',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+        padding: '20px',
+      }}
+    >
+      {needsPantry && (
+        <PantryView
+          hideTitle
+          visibleSections={pantrySections}
+          isEmbedded
+          targetIndices={targetIndices}
+        />
+      )}
+      {needsProfile && (
+        <ProfileView
+          hideTitle
+          visibleSections={profileSections}
+          isEmbedded
+          targetIndices={targetIndices}
+        />
+      )}
       {needsHistory && <HistoryView hideTitle isEmbedded />}
     </div>
   );

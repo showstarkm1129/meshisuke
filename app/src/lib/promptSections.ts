@@ -69,7 +69,7 @@ export function parseSections(raw: string): ParsedSections {
   const leftover = stripped
     .replace(/<!--\s*@(end)?section:[\w-]+\s*-->/g, '')
     .split(/\n/)
-    .filter(line => line.trim().length > 0 && line.trim() !== '---')
+    .filter((line) => line.trim().length > 0 && line.trim() !== '---')
     .join('\n')
     .trim();
   if (leftover.length > 0) {

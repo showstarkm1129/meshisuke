@@ -20,13 +20,13 @@ const STORAGE_TYPES: ReadonlyArray<StorageType> = ['冷蔵', '冷凍', '常温',
 function normalizeName(name: string): string {
   return name
     .trim()
-    .replace(/[\s　]+/g, '')
+    .replace(/[\s\u3000]+/g, '')
     .toLowerCase();
 }
 
 function findByName<T extends { name: string }>(arr: T[], name: string): number {
   const target = normalizeName(name);
-  return arr.findIndex(x => normalizeName(x.name) === target);
+  return arr.findIndex((x) => normalizeName(x.name) === target);
 }
 
 function clampNonNegative(n: number): number {
@@ -74,9 +74,9 @@ function isValidStorage(s: unknown): s is StorageType {
  */
 export function mergePantryItems(
   current: Ingredient[],
-  items: IngredientItemDelta[],
+  items: IngredientItemDelta[]
 ): MergeResult<Ingredient> {
-  const next: Ingredient[] = current.map(x => ({ ...x }));
+  const next: Ingredient[] = current.map((x) => ({ ...x }));
   const warnings: string[] = [];
 
   for (const item of items) {
@@ -109,7 +109,9 @@ export function mergePantryItems(
         ...(item.unit !== undefined ? { unit: item.unit } : {}),
         ...(item.purchased_at !== undefined ? { purchased_at: item.purchased_at } : {}),
         ...(item.expires_at !== undefined ? { expires_at: item.expires_at } : {}),
-        ...(item.storage !== undefined && isValidStorage(item.storage) ? { storage: item.storage } : {}),
+        ...(item.storage !== undefined && isValidStorage(item.storage)
+          ? { storage: item.storage }
+          : {}),
         ...(item.note !== undefined ? { note: item.note } : {}),
       };
     } else {
@@ -125,7 +127,7 @@ export function mergePantryItems(
       const hasSet = typeof item.set === 'number' && Number.isFinite(item.set);
       if (hasDelta && !hasSet) {
         warnings.push(
-          `「${item.name}」は既存在庫に見つかりません。delta 指定は no-op としました（表記揺れの可能性）`,
+          `「${item.name}」は既存在庫に見つかりません。delta 指定は no-op としました（表記揺れの可能性）`
         );
         continue;
       }
@@ -167,9 +169,9 @@ export interface SeasoningItemDelta {
  */
 export function mergeSeasonings(
   current: Seasoning[],
-  items: SeasoningItemDelta[],
+  items: SeasoningItemDelta[]
 ): MergeResult<Seasoning> {
-  const next: Seasoning[] = current.map(x => ({ ...x }));
+  const next: Seasoning[] = current.map((x) => ({ ...x }));
   const warnings: string[] = [];
 
   for (const item of items) {

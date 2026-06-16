@@ -7,7 +7,7 @@ export function Sidebar({
   onSwitchSession,
   onDeleteSession,
   isOpen,
-  onToggle
+  onToggle,
 }: {
   sessions: ChatSession[];
   currentSessionId: string | null;
@@ -29,14 +29,14 @@ export function Sidebar({
       </div>
       {isOpen && (
         <div className="session-list">
-          {sessions.map(s => (
-            <div 
-              key={s.id} 
+          {sessions.map((s) => (
+            <div
+              key={s.id}
               className={`session-item ${s.id === currentSessionId ? 'active' : ''}`}
               onClick={() => onSwitchSession(s.id)}
             >
               <span className="session-title">{s.title || '新しいチャット'}</span>
-              <button 
+              <button
                 className="delete-session-btn"
                 title="削除"
                 onClick={(e) => {
@@ -45,7 +45,9 @@ export function Sidebar({
                     onDeleteSession(s.id);
                   }
                 }}
-              >×</button>
+              >
+                ×
+              </button>
             </div>
           ))}
         </div>

@@ -76,10 +76,7 @@ export async function readJsonlFile<T>(fileHandle: FileSystemFileHandle): Promis
  * オブジェクトを JSON として上書き保存する
  * 保存失敗時は Error をスローする（呼び出し側でキャッチすること）
  */
-export async function writeJsonFile<T>(
-  fileHandle: FileSystemFileHandle,
-  data: T
-): Promise<void> {
+export async function writeJsonFile<T>(fileHandle: FileSystemFileHandle, data: T): Promise<void> {
   const writable = await fileHandle.createWritable();
   try {
     await writable.write(JSON.stringify(data, null, 2));
@@ -132,7 +129,8 @@ export async function rewriteJsonlFile(
   fileHandle: FileSystemFileHandle,
   records: MealRecord[]
 ): Promise<void> {
-  const content = records.map((r) => JSON.stringify(r)).join('\n') + (records.length > 0 ? '\n' : '');
+  const content =
+    records.map((r) => JSON.stringify(r)).join('\n') + (records.length > 0 ? '\n' : '');
   const writable = await fileHandle.createWritable();
   try {
     await writable.write(content);

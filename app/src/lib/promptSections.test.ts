@@ -73,7 +73,7 @@ initial body
     const result = parseSections(raw);
     expect(result.sections.initial).toBe('initial body');
     // core は閉じタグ抜けなのでマッチせず空のまま（leftover として吸収される可能性はある）
-    expect(result.warnings.some(w => w.includes('Unclosed'))).toBe(true);
+    expect(result.warnings.some((w) => w.includes('Unclosed'))).toBe(true);
   });
 
   it('未知セクション名は unknownSections に積まれる', () => {
@@ -89,7 +89,7 @@ typo
     const result = parseSections(raw);
     expect(result.sections.core).toBe('ok');
     expect(result.unknownSections).toContain('misspelled');
-    expect(result.warnings.some(w => w.includes('misspelled'))).toBe(true);
+    expect(result.warnings.some((w) => w.includes('misspelled'))).toBe(true);
   });
 
   it('マーカー外の本文は core 末尾に結合される', () => {

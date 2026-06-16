@@ -16,8 +16,8 @@ function measure(label: string, state: ConversationState) {
   const pct = Math.round(res.savingsRatio * 100);
   console.log(
     `[bench] ${label.padEnd(30)} ` +
-    `sections=[${res.includedSections.join(',')}] ` +
-    `${res.composedLines}/${res.baselineLines} lines (${pct}% saved)`
+      `sections=[${res.includedSections.join(',')}] ` +
+      `${res.composedLines}/${res.baselineLines} lines (${pct}% saved)`
   );
   return res;
 }

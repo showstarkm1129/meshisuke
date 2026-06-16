@@ -8,6 +8,7 @@ Claude Code のサブエージェント運用ルールを定義する。
 
 ## ディレクトリ構成
 
+- `package.json`（ルート）— 検証スタックの単一入口。`npm --prefix app` で実体を `app/` に委譲する（`npm run verify` 等）。依存は持たない。
 - `app/` — フロントエンド本体（React + Vite + TypeScript）
 - `data/` — ユーザーデータの実例（仮想テストユーザー）
   - `profile.json` / `equipment.json` / `pantry.json` / `meal_history.jsonl`

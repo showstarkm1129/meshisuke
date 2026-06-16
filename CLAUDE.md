@@ -35,6 +35,23 @@ LLM API キーは `localStorage` に保存（BYO 前提）。OpenRouter 等の�
 
 ---
 
+## 検証スタック（実装時の自己検証）
+
+実装・編集を行ったら、**プロジェクトルートから** 以下を必ず実行し、緑になることを確認してから完了とする（コア原則の自己検証の具体化）。
+
+```bash
+npm run verify        # typecheck → lint → format:check → test（高速。実装ループの基本ゲート）
+npm run verify:full   # 上記 + build（PR 相当の区切り前に実行）
+```
+
+- 実体は `app/` に存在し、ルート `package.json` が `npm --prefix app` で委譲する。`app/` 配下でも `npm run verify` で同じ。
+- 個別実行も可: `npm run typecheck` / `lint` / `test` / `build` / `format:check`。
+- **ゲートは常に緑が前提**。`verify` が赤になる変更は未完成とみなす。新規にエラーを出さない。
+- `lint` は error=0 を必須とする。`react-hooks/set-state-in-effect` のみ既知の未対応として `warn` に降格済み（ProfileView / PantryView / HistoryView。恒久対応は別タスク）。
+- 整形は `format:check`（`prettier --check`、書き込みなし）で確認。`verify` ゲートに組込み済み。整形崩れを直すときは `npm run format` を使う。
+
+---
+
 ## 参照ドキュメント
 
 - [structure.md](./structure.md) — プロジェクト構造・サブエージェント運用ルール

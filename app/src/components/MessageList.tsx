@@ -3,16 +3,16 @@ import type { ChatTurn } from '../lib/chatHistory';
 import { MessageBubble } from './MessageBubble';
 import { ToolCallNotice } from './ToolCallNotice';
 
-export function MessageList({ 
-  turns, 
-  isWaiting, 
+export function MessageList({
+  turns,
+  isWaiting,
   currentToolNotices = [],
-  onSend
-}: { 
-  turns: ChatTurn[], 
-  isWaiting: boolean, 
-  currentToolNotices?: string[],
-  onSend: (text: string) => void
+  onSend,
+}: {
+  turns: ChatTurn[];
+  isWaiting: boolean;
+  currentToolNotices?: string[];
+  onSend: (text: string) => void;
 }) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -28,9 +28,9 @@ export function MessageList({
         </div>
       )}
       {turns.map((turn, i) => (
-        <MessageBubble 
-          key={turn.id} 
-          turn={turn} 
+        <MessageBubble
+          key={turn.id}
+          turn={turn}
           isLatest={i === turns.length - 1}
           onSend={onSend}
         />
@@ -49,7 +49,9 @@ export function MessageList({
                 </div>
               )}
               <div className="loading-dots">
-                <span>●</span><span>●</span><span>●</span>
+                <span>●</span>
+                <span>●</span>
+                <span>●</span>
               </div>
             </div>
           </div>

@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { LLMProvider, SendMessageRequest, SendMessageResponse, ChatMessage, ToolCall } from './types';
+import type {
+  LLMProvider,
+  SendMessageRequest,
+  SendMessageResponse,
+  ChatMessage,
+  ToolCall,
+} from './types';
 import { formatProviderError, type ProviderErrorBody } from './errors';
 import { PROVIDER_LABELS } from './provider';
 
@@ -12,21 +18,24 @@ export class OpenRouterProvider implements LLMProvider {
   async sendMessage(req: SendMessageRequest): Promise<SendMessageResponse> {
     const payload = {
       model: req.model,
-      messages: req.messages.map(msg => this.formatMessage(msg)),
-      tools: req.tools.length > 0 ? req.tools.map(tool => ({
-        type: 'function',
-        function: {
-          name: tool.name,
-          description: tool.description,
-          parameters: tool.parameters,
-        }
-      })) : undefined,
+      messages: req.messages.map((msg) => this.formatMessage(msg)),
+      tools:
+        req.tools.length > 0
+          ? req.tools.map((tool) => ({
+              type: 'function',
+              function: {
+                name: tool.name,
+                description: tool.description,
+                parameters: tool.parameters,
+              },
+            }))
+          : undefined,
     };
 
     const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': window.location.origin,
         'X-Title': 'meshisuke',
@@ -98,7 +107,7 @@ export class OpenRouterProvider implements LLMProvider {
     if (msg.role === 'assistant') {
       const formatted: any = { role: 'assistant', content: msg.content };
       if (msg.toolCalls && msg.toolCalls.length > 0) {
-        formatted.tool_calls = msg.toolCalls.map(tc => ({
+        formatted.tool_calls = msg.toolCalls.map((tc) => ({
           id: tc.id,
           type: 'function',
           function: {

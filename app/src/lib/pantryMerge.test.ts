@@ -35,9 +35,9 @@ describe('mergePantryItems', () => {
     ];
     const { next } = mergePantryItems(current, [{ name: '玉ねぎ', delta: -1 }]);
     expect(next).toHaveLength(3);
-    expect(next.find(x => x.name === '玉ねぎ')?.quantity).toBe(2);
-    expect(next.find(x => x.name === '鶏もも')?.quantity).toBe(200);
-    expect(next.find(x => x.name === '卵')?.quantity).toBe(5);
+    expect(next.find((x) => x.name === '玉ねぎ')?.quantity).toBe(2);
+    expect(next.find((x) => x.name === '鶏もも')?.quantity).toBe(200);
+    expect(next.find((x) => x.name === '卵')?.quantity).toBe(5);
   });
 
   it('remove 省略では消えない（quantity=0 になっても残る）', () => {
@@ -48,10 +48,7 @@ describe('mergePantryItems', () => {
   });
 
   it('remove: true のときだけ削除される', () => {
-    const current: Ingredient[] = [
-      ing({ name: '玉ねぎ' }),
-      ing({ name: '卵', unit: '個' }),
-    ];
+    const current: Ingredient[] = [ing({ name: '玉ねぎ' }), ing({ name: '卵', unit: '個' })];
     const { next } = mergePantryItems(current, [{ name: '玉ねぎ', remove: true }]);
     expect(next).toHaveLength(1);
     expect(next[0].name).toBe('卵');
@@ -71,7 +68,13 @@ describe('mergePantryItems', () => {
 
   it('既存品目の未指定フィールドは保持される', () => {
     const current: Ingredient[] = [
-      ing({ name: '玉ねぎ', quantity: 3, purchased_at: '2026-05-20', expires_at: '2026-06-05', note: '甘い' }),
+      ing({
+        name: '玉ねぎ',
+        quantity: 3,
+        purchased_at: '2026-05-20',
+        expires_at: '2026-06-05',
+        note: '甘い',
+      }),
     ];
     const { next } = mergePantryItems(current, [{ name: '玉ねぎ', delta: -1 }]);
     expect(next[0].purchased_at).toBe('2026-05-20');
@@ -94,13 +97,17 @@ describe('mergePantryItems', () => {
 
   it('新規追加: unit 欠落はスキップして warning', () => {
     const current: Ingredient[] = [];
-    const { next, warnings } = mergePantryItems(current, [{ name: 'バター', set: 200 } as any]);
+    const { next, warnings } = mergePantryItems(current, [
+      { name: 'バター', set: 200 } as unknown as Ingredient,
+    ]);
     expect(next).toHaveLength(0);
     expect(warnings.length).toBeGreaterThan(0);
   });
 
   it('既存に無い名前への delta/set は no-op + warning（表記揺れ二重登録防止）', () => {
-    const current: Ingredient[] = [ing({ name: '鶏もも', unit: 'g', quantity: 200, storage: '冷蔵' })];
+    const current: Ingredient[] = [
+      ing({ name: '鶏もも', unit: 'g', quantity: 200, storage: '冷蔵' }),
+    ];
     const { next, warnings } = mergePantryItems(current, [{ name: '鶏もも肉', delta: -100 }]);
     expect(next).toHaveLength(1);
     expect(next[0].quantity).toBe(200);
@@ -133,8 +140,8 @@ describe('mergeSeasonings', () => {
       sea({ name: '味噌', amount_current: 300, amount_full: 500, unit: 'g' }),
     ];
     const { next } = mergeSeasonings(current, [{ name: '醤油', delta_ml_or_g: -15 }]);
-    expect(next.find(x => x.name === '醤油')?.amount_current).toBe(185);
-    expect(next.find(x => x.name === '味噌')?.amount_current).toBe(300);
+    expect(next.find((x) => x.name === '醤油')?.amount_current).toBe(185);
+    expect(next.find((x) => x.name === '味噌')?.amount_current).toBe(300);
   });
 
   it('refill_full で amount_full に戻る', () => {
@@ -157,7 +164,9 @@ describe('mergeSeasonings', () => {
 
   it('既存に無い調味料は no-op + warning（新規追加しない）', () => {
     const current: Seasoning[] = [sea({ name: '醤油' })];
-    const { next, warnings } = mergeSeasonings(current, [{ name: '存在しない', delta_ml_or_g: -10 }]);
+    const { next, warnings } = mergeSeasonings(current, [
+      { name: '存在しない', delta_ml_or_g: -10 },
+    ]);
     expect(next).toHaveLength(1);
     expect(warnings.length).toBeGreaterThan(0);
   });

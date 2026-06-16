@@ -32,7 +32,7 @@ function migrateLegacyModelKeyOnce(): void {
 function loadSettingsFromStorage(): Settings {
   migrateLegacyModelKeyOnce();
 
-  const provider = (localStorage.getItem('meshisuke_active_provider') as ProviderName | null);
+  const provider = localStorage.getItem('meshisuke_active_provider') as ProviderName | null;
 
   const getModel = (p: ProviderName, defaultModel: string) => {
     const val = localStorage.getItem(`meshisuke_active_model_${p}`);
@@ -122,11 +122,14 @@ export function useSettings() {
   const addModelToHistory = (model: string) => {
     const currentProvider = loadSettingsFromStorage().activeProvider;
     if (!currentProvider || !model.trim()) return;
-    
+
     const history = loadSettingsFromStorage().modelHistory[currentProvider];
     if (!history.includes(model)) {
       const newHistory = [model, ...history].slice(0, 10);
-      localStorage.setItem(`meshisuke_model_history_${currentProvider}`, JSON.stringify(newHistory));
+      localStorage.setItem(
+        `meshisuke_model_history_${currentProvider}`,
+        JSON.stringify(newHistory)
+      );
       dispatchUpdate();
     }
   };

@@ -16,7 +16,7 @@ const COMMANDS = [
 export function MessageInput({
   onSend,
   onCommand,
-  disabled
+  disabled,
 }: {
   onSend: (text: string) => void;
   onCommand?: (cmd: string) => void;
@@ -28,7 +28,9 @@ export function MessageInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const showSuggest = text.startsWith('/') && !text.includes(' ');
-  const filteredCommands = showSuggest ? COMMANDS.filter(c => c.cmd.startsWith(text.toLowerCase())) : [];
+  const filteredCommands = showSuggest
+    ? COMMANDS.filter((c) => c.cmd.startsWith(text.toLowerCase()))
+    : [];
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -56,12 +58,12 @@ export function MessageInput({
     if (showSuggest && filteredCommands.length > 0) {
       if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedIndex(prev => (prev > 0 ? prev - 1 : filteredCommands.length - 1));
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredCommands.length - 1));
         return;
       }
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedIndex(prev => (prev < filteredCommands.length - 1 ? prev + 1 : 0));
+        setSelectedIndex((prev) => (prev < filteredCommands.length - 1 ? prev + 1 : 0));
         return;
       }
       if (e.key === 'Tab') {
@@ -94,12 +96,13 @@ export function MessageInput({
       {showSuggest && filteredCommands.length > 0 && (
         <div className="command-suggest-popup">
           {filteredCommands.map((c, idx) => (
-            <div 
-              key={c.cmd} 
+            <div
+              key={c.cmd}
               className={`command-item ${idx === selectedIndex ? 'selected' : ''}`}
               onClick={() => handleSend(c.cmd)}
             >
-              <strong style={{ color: '#ff9800' }}>{c.cmd}</strong> <span style={{ color: '#666', fontSize: '0.9em' }}>- {c.desc}</span>
+              <strong style={{ color: '#ff9800' }}>{c.cmd}</strong>{' '}
+              <span style={{ color: '#666', fontSize: '0.9em' }}>- {c.desc}</span>
             </div>
           ))}
         </div>
@@ -110,15 +113,15 @@ export function MessageInput({
           value={text}
           onChange={handleTextChange}
           onKeyDown={handleKeyDown}
-          onCompositionStart={() => isComposing.current = true}
-          onCompositionEnd={() => isComposing.current = false}
+          onCompositionStart={() => (isComposing.current = true)}
+          onCompositionEnd={() => (isComposing.current = false)}
           placeholder="メッセージを入力... (/ でコマンド入力)"
           disabled={disabled}
           rows={1}
         />
         <div style={{ display: 'flex', gap: '4px', flexShrink: 0, marginBottom: '1px' }}>
-          <button 
-            onClick={() => handleSend('おまかせで')} 
+          <button
+            onClick={() => handleSend('おまかせで')}
             disabled={disabled}
             className="omakase-button"
             style={{
@@ -129,13 +132,13 @@ export function MessageInput({
               padding: '10px 16px',
               fontWeight: 'bold',
               cursor: disabled ? 'not-allowed' : 'pointer',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
             }}
           >
             おまかせ
           </button>
-          <button 
-            onClick={() => handleSend()} 
+          <button
+            onClick={() => handleSend()}
             disabled={disabled || !text.trim()}
             className="send-button"
             style={{ marginBottom: 0 }}

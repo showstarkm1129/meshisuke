@@ -23,12 +23,25 @@ const ADJUST_PANTRY_ITEMS: ToolDefinition = {
           properties: {
             name: { type: 'string', description: '食材名。在庫の正式名と完全一致させる。' },
             delta: { type: 'number', description: '現在数量への増減（負で減算）。set と排他。' },
-            set: { type: 'number', description: '数量を絶対値で上書き。delta と排他。新規追加時の初期値にも使える。' },
-            remove: { type: 'boolean', description: 'true のときだけ削除する。省略では削除されない。' },
+            set: {
+              type: 'number',
+              description: '数量を絶対値で上書き。delta と排他。新規追加時の初期値にも使える。',
+            },
+            remove: {
+              type: 'boolean',
+              description: 'true のときだけ削除する。省略では削除されない。',
+            },
             unit: { type: 'string', description: '新規追加時のみ必須。' },
-            purchased_at: { type: 'string', description: 'YYYY-MM-DD。新規追加時の任意。省略時は当日。' },
+            purchased_at: {
+              type: 'string',
+              description: 'YYYY-MM-DD。新規追加時の任意。省略時は当日。',
+            },
             expires_at: { type: 'string', description: 'YYYY-MM-DD。任意。' },
-            storage: { type: 'string', enum: ['冷蔵', '冷凍', '常温', '野菜室'], description: '新規追加時の任意。省略時は冷蔵。' },
+            storage: {
+              type: 'string',
+              enum: ['冷蔵', '冷凍', '常温', '野菜室'],
+              description: '新規追加時の任意。省略時は冷蔵。',
+            },
             note: { type: 'string' },
           },
           required: ['name'],
@@ -54,7 +67,10 @@ const ADJUST_SEASONINGS: ToolDefinition = {
           type: 'object',
           properties: {
             name: { type: 'string' },
-            delta_ml_or_g: { type: 'number', description: '残量の増減（負で減算）。単位は対象調味料の unit に従う。' },
+            delta_ml_or_g: {
+              type: 'number',
+              description: '残量の増減（負で減算）。単位は対象調味料の unit に従う。',
+            },
             refill_full: { type: 'boolean', description: '新品/満タンに戻す。' },
             note: { type: 'string' },
           },
@@ -68,7 +84,8 @@ const ADJUST_SEASONINGS: ToolDefinition = {
 
 const ADD_MEAL_RECORD: ToolDefinition = {
   name: 'add_meal_record',
-  description: 'ユーザーが食事を取った（または取ると確定した）時、meal_history に 1 レコード追加する。',
+  description:
+    'ユーザーが食事を取った（または取ると確定した）時、meal_history に 1 レコード追加する。',
   parameters: {
     type: 'object',
     properties: {
@@ -120,7 +137,8 @@ const ADD_MEAL_RECORD: ToolDefinition = {
 
 const UPDATE_PROFILE: ToolDefinition = {
   name: 'update_profile',
-  description: '嗜好（favorites/dislikes/allergies）の重み更新、栄養目標の変更、初回フォーム完了時の onboarding_completed=true 設定などに使う。profile オブジェクト全体を渡す。',
+  description:
+    '嗜好（favorites/dislikes/allergies）の重み更新、栄養目標の変更、初回フォーム完了時の onboarding_completed=true 設定などに使う。profile オブジェクト全体を渡す。',
   parameters: {
     type: 'object',
     properties: {
@@ -159,7 +177,15 @@ const UPDATE_PANTRY_FULL: ToolDefinition = {
                 storage: { type: 'string', enum: ['冷蔵', '冷凍', '常温', '野菜室'] },
                 note: { type: 'string' },
               },
-              required: ['name', 'quantity', 'unit', 'purchased_at', 'expires_at', 'storage', 'note'],
+              required: [
+                'name',
+                'quantity',
+                'unit',
+                'purchased_at',
+                'expires_at',
+                'storage',
+                'note',
+              ],
             },
           },
           seasonings: {
@@ -193,9 +219,7 @@ export const TOOLS_DIALOG: ToolDefinition[] = [
 ];
 
 /** 裏側モードで追加されるツール。 */
-export const TOOLS_BACKSIDE_EXTRA: ToolDefinition[] = [
-  UPDATE_PANTRY_FULL,
-];
+export const TOOLS_BACKSIDE_EXTRA: ToolDefinition[] = [UPDATE_PANTRY_FULL];
 
 /** 会話モードに応じて使うべきツール一覧を返す。 */
 export function selectTools(isBackside: boolean): ToolDefinition[] {
@@ -203,10 +227,9 @@ export function selectTools(isBackside: boolean): ToolDefinition[] {
 }
 
 /** 全ツール名。本文サニタイザがツール呼び出し漏れを検出するのに使う。 */
-export const ALL_TOOL_NAMES: string[] = [
-  ...TOOLS_DIALOG,
-  ...TOOLS_BACKSIDE_EXTRA,
-].map(t => t.name);
+export const ALL_TOOL_NAMES: string[] = [...TOOLS_DIALOG, ...TOOLS_BACKSIDE_EXTRA].map(
+  (t) => t.name
+);
 
 export const TOOL_NOTICE_LABELS: Record<string, string> = {
   adjust_pantry_items: '冷蔵庫の在庫を整理しています…',
